@@ -100,7 +100,6 @@ function buildTokenMap(mdc, scheme) {
 
   // Hover/active state layers per MD3 (8% resting interaction, 12% pressed).
   const hover = (fg, bg) => over(fg, 0.08, bg);
-  const pressed = (fg, bg) => over(fg, 0.14, bg);
   // Primary button hover: darken in light, lighten in dark (matches base DSH).
   const primaryHover = scheme.isDark ? over(0xffffff, 0.12, R.primary) : over(0x000000, 0.12, R.primary);
 
@@ -120,8 +119,8 @@ function buildTokenMap(mdc, scheme) {
     '--dsw-alias-brand-primary-invert': hexFromArgb(R.onPrimary),
     '--dsw-alias-button-primary-hover': primaryHover,
     '--dsw-alias-button-primary-dimmed': hexFromArgb(R.secondaryContainer),
-    '--dsw-alias-button-info-fill': hexFromArgb(R.secondaryContainer),
-    '--dsw-alias-button-info-hover': hover(R.onSecondaryContainer, R.secondaryContainer),
+    '--dsw-alias-button-info-fill': hexFromArgb(R.primary),
+    '--dsw-alias-button-info-hover': primaryHover,
     '--dsw-alias-button-ghost-active-fill': hexFromArgb(R.secondaryContainer),
     '--dsw-alias-button-ghost-active-hover': hover(R.onSecondaryContainer, R.secondaryContainer),
     '--dsw-alias-button-ghost-active-border': hexFromArgb(R.outline),
@@ -142,11 +141,14 @@ function buildTokenMap(mdc, scheme) {
     // --- links & brand states ------------------------------------------------
     '--dsw-alias-link': hexFromArgb(R.primary),
     '--dsw-alias-state-business-primary': hexFromArgb(R.primary),
-    '--dsw-alias-state-business-tertiary': hexFromArgb(R.primaryContainer),
+    // Base uses a tinted plate here (deepseek-100/800), so the tint role wins
+    // over the vivid primaryContainer fidelity derives for this seed.
+    '--dsw-alias-state-business-tertiary': hexFromArgb(R.secondaryContainer),
 
     // --- error (the one MD3 status role; success/warn keep base colors) ------
+    // The base theme ships only state-error-primary/secondary — there is no
+    // error-tertiary token, and MD3's errorContainer has no slot here.
     '--dsw-alias-state-error-primary': hexFromArgb(R.error),
-    '--dsw-alias-state-error-tertiary': hexFromArgb(R.errorContainer),
 
     // --- inverse surfaces ----------------------------------------------------
     '--dsw-alias-toast-bg': hexFromArgb(R.inverseSurface),

@@ -105,4 +105,16 @@ const row = slotSlots.component({
 });
 if (!row || !row.h) throw new Error("row render failed");
 console.log("row render: ok");
+
+// Every palette token must be a real harness token, or it is written to the
+// document and read by nobody (the presenter forwards names unchecked).
+const baseTokens = new Set(JSON.parse(readFileSync("scripts/base-tokens.json", "utf8")));
+const { MD3_PALETTES } = await import("../lib/palettes.js");
+const unknownTokens = new Set();
+for (const palette of Object.values(MD3_PALETTES)) {
+  for (const name of Object.keys(palette.light)) if (!baseTokens.has(name)) unknownTokens.add(name);
+}
+if (unknownTokens.size) throw new Error(`unknown token names: ${[...unknownTokens].join(", ")}`);
+console.log("token names: ok (" + baseTokens.size + " known base tokens)");
+
 console.log("SMOKE_OK");
