@@ -1,0 +1,12 @@
+{
+  "name": "dsh-md3-theme",
+  "description": "Material Design 3 theme with accent presets for DeepSeek Harness",
+  "version": "0.1.0",
+  "entry": {
+    "name": "dsh-md3-theme",
+    "inject": []
+  },
+  "client": {
+    "platform": "web"
+  }
+}

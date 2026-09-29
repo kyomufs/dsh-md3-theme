@@ -1,0 +1,5 @@
+# dsh-md3-theme bundle patch: mount the host plugin under its package name,
+# resolved through the profile's node_modules.
+- insert:
+    - id: dsh-md3-theme
+      name: dsh-md3-theme
