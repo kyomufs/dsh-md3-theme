@@ -75,8 +75,10 @@ Known harness limits: corner radii are not tokenized (only the global superellip
 npm install
 npm run generate   # rebuild lib/palettes.js + lib/client-palettes.js from seeds
 npm run build      # splice palettes + src/client.js into lib/client.js
-npm run check      # generate + build + syntax-check both halves
+npm run check      # generate + build + syntax-check + loader smoke test
 ```
+
+The smoke test (`scripts/smoke.mjs`) loads `lib/client.js` through the same module-loader wrapper the harness uses and runs `apply()` plus the settings row against a mocked context — it catches store/slot API misuse before an install ever sees it.
 
 Client edits need only a page reload (bundles are served with `no-cache`); host/package metadata changes need a server restart.
 

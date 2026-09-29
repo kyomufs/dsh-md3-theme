@@ -47,7 +47,7 @@
   "scripts": {
     "generate": "esbuild scripts/generate-palettes.mjs --bundle --platform=node --format=esm --outfile=.cache/generate-palettes.mjs --log-level=warning && node .cache/generate-palettes.mjs",
     "build": "node build.mjs",
-    "check": "npm run generate && npm run build && node --check lib/client.js && node --check lib/index.js",
+    "check": "npm run generate && npm run build && node --check lib/client.js && node --check lib/index.js && node scripts/smoke.mjs",
     "prepublishOnly": "npm run check"
   },
   "peerDependencies": {
