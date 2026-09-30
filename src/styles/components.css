@@ -1,132 +1,311 @@
-/* dsh-md3-theme — components layer.
+/* dsh-md3-theme — components layer (full MD3 restyle).
  * Selector policy: role/aria/data-* hooks first; hashed module classes only
- * when listed in scripts/selectors.json (the smoke test greps the installed
- * harness bundles for each of them, so a dsh update that drops a class fails
- * `npm run check` instead of silently breaking the UI).
+ * when the smoke test can grep them in the installed harness bundles (the
+ * registry also covers the harness core bundle and profile plugin packages).
  */
 
 /* ===================== Overlays: dialogs ===================== */
-[role="dialog"] {
+html [role="dialog"] {
   border-radius: var(--dsh-md3-radius-xl);
   box-shadow: var(--dsw-shadow-lv3);
 }
-.VOzbGW_overlay {
+html .VOzbGW_overlay {
   animation: md3-fade-in var(--dsh-md3-duration-standard-decel) both;
 }
-.VOzbGW_panel {
+html .VOzbGW_panel {
   border-radius: var(--dsh-md3-radius-xl);
   box-shadow: var(--dsw-shadow-lv3);
 }
 
 /* ===================== Menus and listboxes ===================== */
-[role="menu"],
-[role="listbox"] {
+html [role="menu"],
+html [role="listbox"] {
   border-radius: var(--dsh-md3-radius-s);
   box-shadow: var(--dsw-shadow-lv2);
+  padding: 4px;
 }
-[role="menu"] [role="menuitem"],
-[role="listbox"] [role="option"] {
-  border-radius: var(--dsh-md3-radius-xs);
+html [role="menu"] [role="menuitem"],
+html [role="listbox"] [role="option"] {
+  border-radius: var(--dsh-md3-radius-s);
+  transition: background-color var(--dsh-md3-duration-short) var(--dsh-md3-easing-standard);
 }
-[role="menu"] [role="menuitem"]:hover,
-[role="listbox"] [role="option"]:hover {
+html [role="menu"] [role="menuitem"]:hover,
+html [role="listbox"] [role="option"]:hover {
   background: var(--dsw-alias-interactive-bg-hover);
+}
+html [role="menu"] [role="menuitem"]:active,
+html [role="listbox"] [role="option"]:active {
+  background: var(--dsw-alias-interactive-bg-active);
+}
+
+/* ===================== State layers: ghost & icon buttons ================ *
+ * M3 interactive default: hover = on-surface 8%, html pressed = 12%. The dsh
+ * interactive-bg tokens are theme-aware equivalents of those state layers. */
+html .hHd-Xa_iconButton,
+html .hHd-Xa_newSession,
+html .hHd-Xa_panelRow,
+html .bhn1Oq_iconButton,
+html .bhn1Oq_searchButton,
+html .P3OORG_iconButton,
+html .VOzbGW_close,
+html .EvIC1a_older button,
+html [data-dockkit-add-tab],
+html .t1T8VW_copy,
+html .dsh_notification_buttonGhost {
+  transition:
+    background-color var(--dsh-md3-duration-short) var(--dsh-md3-easing-standard),
+    transform var(--dsh-md3-duration-short) var(--dsh-md3-easing-standard);
+}
+html .hHd-Xa_iconButton:hover:not(:disabled),
+html .hHd-Xa_newSession:hover:not(:disabled),
+html .hHd-Xa_panelRow:hover:not(:disabled),
+html .bhn1Oq_iconButton:hover:not(:disabled),
+html .bhn1Oq_searchButton:hover:not(:disabled),
+html .P3OORG_iconButton:hover:not(:disabled),
+html .VOzbGW_close:hover:not(:disabled),
+html .EvIC1a_older button:hover:not(:disabled),
+html [data-dockkit-add-tab]:hover:not(:disabled),
+html .t1T8VW_copy:hover:not(:disabled),
+html .dsh_notification_buttonGhost:hover:not(:disabled) {
+  background: var(--dsw-alias-interactive-bg-hover);
+}
+html .hHd-Xa_iconButton:active:not(:disabled),
+html .hHd-Xa_newSession:active:not(:disabled),
+html .hHd-Xa_panelRow:active:not(:disabled),
+html .bhn1Oq_iconButton:active:not(:disabled),
+html .P3OORG_iconButton:active:not(:disabled),
+html .VOzbGW_close:active:not(:disabled),
+html .t1T8VW_copy:active:not(:disabled),
+html .dsh_notification_buttonGhost:active:not(:disabled) {
+  background: var(--dsw-alias-interactive-bg-active);
+}
+
+/* ===================== Filled buttons: M3 state layers ==================== */
+html .uV2eYG_primary,
+html .uV2eYG_add,
+html .dsh_notification_buttonPri {
+  transition:
+    transform var(--dsh-md3-duration-short) var(--dsh-md3-easing-standard),
+    filter var(--dsh-md3-duration-short) var(--dsh-md3-easing-standard);
+}
+html .uV2eYG_primary:hover:not(:disabled),
+html .uV2eYG_add:hover:not(:disabled),
+html .dsh_notification_buttonPri:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+html .uV2eYG_primary:active:not(:disabled),
+html .uV2eYG_add:active:not(:disabled),
+html .dsh_notification_buttonPri:active:not(:disabled) {
+  transform: scale(0.97);
+  filter: brightness(0.95);
 }
 
 /* ===================== Settings dialog internals ===================== */
 /* Nav drawer items become fully rounded MD3 rows. */
-.VOzbGW_navCell {
+html .VOzbGW_navCell {
   border-radius: var(--dsh-md3-radius-full);
 }
-.VOzbGW_navCell:not(.VOzbGW_active):hover {
+html .VOzbGW_navCell:not(.VOzbGW_active):hover {
   background: var(--dsw-alias-interactive-bg-hover);
 }
 
 /* ===================== Trigger buttons → pills ===================== */
-button[aria-haspopup="menu"],
-button[aria-haspopup="listbox"],
-button[aria-haspopup="dialog"],
-button[aria-haspopup="true"] {
+html button[aria-haspopup="menu"],
+html button[aria-haspopup="listbox"],
+html button[aria-haspopup="dialog"],
+html button[aria-haspopup="true"] {
   border-radius: var(--dsh-md3-radius-full);
 }
-.Sh0Q9G_trigger,
-._7KE1Ra_trigger,
-.oY77xG_selector,
-.hVGvvW_selector,
-.lats3W_selector,
-.T1PP_q_selector,
-.pXSMma_workspace,
-.cubgiG_seat {
+html .Sh0Q9G_trigger,
+html ._7KE1Ra_trigger,
+html .oY77xG_selector,
+html .hVGvvW_selector,
+html .lats3W_selector,
+html .T1PP_q_selector,
+html .pXSMma_workspace,
+html .cubgiG_seat {
   border-radius: var(--dsh-md3-radius-full);
+  transition: background-color var(--dsh-md3-duration-short) var(--dsh-md3-easing-standard);
+}
+html .oY77xG_selector:hover:not(:disabled),
+html .hVGvvW_selector:hover:not(:disabled),
+html .lats3W_selector:hover:not(:disabled),
+html .T1PP_q_selector:hover:not(:disabled),
+html .pXSMma_workspace:hover:not(:disabled),
+html .cubgiG_seat:hover:not(:disabled) {
+  background: var(--dsw-alias-interactive-bg-hover);
 }
 
 /* ===================== Sidebar rows ===================== */
-.hHd-Xa_newSession,
-.hHd-Xa_panelRow {
+html .hHd-Xa_newSession,
+html .hHd-Xa_panelRow {
   border-radius: var(--dsh-md3-radius-full);
 }
 
+/* ===================== Session list (navigation drawer) =================== */
+html .YDXeBa_sessionRow,
+html .YDXeBa_searchResultRow,
+html .Y0dWHa_historyLoadRow {
+  transition: background-color var(--dsh-md3-duration-short) var(--dsh-md3-easing-standard);
+}
+html .YDXeBa_sessionRow:hover,
+html .YDXeBa_searchResultRow:hover,
+html .Y0dWHa_historyLoadRow:hover {
+  background: var(--dsw-alias-interactive-bg-hover);
+}
+html .YDXeBa_sessionRow.YDXeBa_selected,
+html .YDXeBa_sessionRow.YDXeBa_menuOpen {
+  background: var(--dsw-alias-state-business-tertiary);
+}
+html .Y0dWHa_historyLoadButton {
+  border-radius: var(--dsh-md3-radius-full);
+  transition: background-color var(--dsh-md3-duration-short) var(--dsh-md3-easing-standard);
+}
+html .Y0dWHa_historyLoadButton:hover:not(:disabled) {
+  background: var(--dsw-alias-interactive-bg-hover);
+}
+
 /* ===================== Composer ===================== */
-[data-composer-card] {
+html [data-composer-card] {
   border-radius: var(--dsh-md3-radius-l);
 }
-[data-composer-card]:focus-within {
+html [data-composer-card]:focus-within {
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--dsw-alias-brand-primary) 55%, transparent);
 }
-.uV2eYG_primary {
-  transition:
-    transform var(--dsh-md3-duration-short) var(--dsh-md3-easing-standard),
-    box-shadow var(--dsh-md3-duration-short) var(--dsh-md3-easing-standard),
-    background-color var(--dsh-md3-duration-short) var(--dsh-md3-easing-standard);
+html [data-composer-card] button:not(.uV2eYG_primary):not(.uV2eYG_add):not(:disabled) {
+  transition: background-color var(--dsh-md3-duration-short) var(--dsh-md3-easing-standard);
 }
-.uV2eYG_primary:hover:not(:disabled) {
-  box-shadow: var(--dsw-shadow-lv1);
-}
-.uV2eYG_primary:active:not(:disabled) {
-  transform: scale(0.96);
-}
-.uV2eYG_add:hover:not(:disabled) {
-  background: color-mix(in srgb, var(--dsw-alias-state-business-tertiary) 80%, var(--dsw-alias-label-primary));
+html [data-composer-card] button:not(.uV2eYG_primary):not(.uV2eYG_add):hover:not(:disabled) {
+  background: var(--dsw-alias-interactive-bg-hover);
 }
 
 /* ===================== Cards → medium (12px) ===================== */
-.Sixlwa_fileCard,
-.mna1RW_card,
-.mufS8W_card,
-.uV2eYG_notice,
-.fsXYAq_card {
+html .Sixlwa_fileCard,
+html .mna1RW_card,
+html .mufS8W_card,
+html .uV2eYG_notice,
+html .fsXYAq_card {
   border-radius: var(--dsh-md3-radius-m);
 }
 
 /* ===================== Message bubbles → large (16px) ===================== */
-.Sixlwa_bubble {
+html .Sixlwa_bubble,
+html .oRe1gG_bubble {
   border-radius: var(--dsh-md3-radius-l);
+}
+html .Sixlwa_retryRow {
+  border-radius: var(--dsh-md3-radius-s);
 }
 
 /* ===================== Chips and pills → full ===================== */
-.bOPqQW_pill,
-.yAWgPa_chip,
-.JObwrW_trigger,
-.JObwrW_bar,
-.xzv4MW_action,
-.Q51KRG_trigger {
+html .bOPqQW_pill,
+html .yAWgPa_chip,
+html .JObwrW_trigger,
+html .JObwrW_bar,
+html .xzv4MW_action,
+html .Q51KRG_trigger {
   border-radius: var(--dsh-md3-radius-full);
 }
 
 /* ===================== Tool rows ===================== */
-.o3BgMG_row {
+html .o3BgMG_row {
   border-radius: var(--dsh-md3-radius-s);
 }
-.o3BgMG_row:hover {
+html .o3BgMG_row:hover {
   background: var(--dsw-alias-interactive-bg-hover);
 }
 
 /* ===================== Modal text input → small (8px) ===================== */
-.pXSMma_modalInput {
+html .pXSMma_modalInput {
   border-radius: var(--dsh-md3-radius-s);
 }
 
 /* ===================== Appearance theme cards → large (16px) ============== */
-._8HJdBW_themeCube {
+html ._8HJdBW_themeCube {
   border-radius: var(--dsh-md3-radius-l);
+}
+
+/* ===================== Settings notification page ========================= *
+ * Plain domain classes from the dsh-notification plugin: M3 checkbox, html list
+ * rows, html button variants. */
+html .dsh_notification_toggleRow {
+  border-radius: var(--dsh-md3-radius-s);
+  transition: background-color var(--dsh-md3-duration-short) var(--dsh-md3-easing-standard);
+}
+html .dsh_notification_toggleRow:hover {
+  background: var(--dsw-alias-interactive-bg-hover);
+}
+html .dsh_notification_button {
+  border-radius: var(--dsh-md3-radius-full);
+  font-weight: 500;
+  letter-spacing: 0.1px;
+  transition:
+    background-color var(--dsh-md3-duration-short) var(--dsh-md3-easing-standard),
+    filter var(--dsh-md3-duration-short) var(--dsh-md3-easing-standard),
+    transform var(--dsh-md3-duration-short) var(--dsh-md3-easing-standard);
+}
+html .dsh_notification_badge {
+  border-radius: var(--dsh-md3-radius-full);
+}
+
+/* M3 checkbox: 20px box, html 2px outline, html primary fill + white check. */
+html input[type="checkbox"] {
+  accent-color: var(--dsw-alias-state-business-primary);
+}
+html input[type="checkbox"].dsh_notification_checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  border: 2px solid var(--dsw-alias-label-secondary);
+  border-radius: var(--dsh-md3-radius-xs);
+  background: transparent;
+  display: inline-grid;
+  place-content: center;
+  cursor: pointer;
+  transition:
+    background-color var(--dsh-md3-duration-short) var(--dsh-md3-easing-standard),
+    border-color var(--dsh-md3-duration-short) var(--dsh-md3-easing-standard);
+}
+html input[type="checkbox"].dsh_notification_checkbox:hover {
+  border-color: var(--dsw-alias-state-business-primary);
+}
+html input[type="checkbox"].dsh_notification_checkbox:checked {
+  background-color: var(--dsw-alias-state-business-primary);
+  border-color: var(--dsw-alias-state-business-primary);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='none' stroke='%23fff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round' d='M5.5 10.5l3 3 6-6'/%3E%3C/svg%3E");
+  background-size: 16px 16px;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* ===================== Text inputs → M3 outlined ========================== */
+html input[type="text"]:not([class*="dsh-md3-"]),
+html input[type="search"]:not([class*="dsh-md3-"]),
+html input[type="number"]:not([class*="dsh-md3-"]) {
+  border: 1px solid var(--dsw-alias-border-l2);
+  border-radius: var(--dsh-md3-radius-s);
+  transition:
+    border-color var(--dsh-md3-duration-short) var(--dsh-md3-easing-standard),
+    box-shadow var(--dsh-md3-duration-short) var(--dsh-md3-easing-standard);
+}
+html input[type="text"]:not([class*="dsh-md3-"]):focus,
+html input[type="search"]:not([class*="dsh-md3-"]):focus,
+html input[type="number"]:not([class*="dsh-md3-"]):focus {
+  outline: none;
+  border-color: var(--dsw-alias-state-business-primary);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--dsw-alias-state-business-primary) 30%, transparent);
+}
+
+/* ===================== Inline switchers → full pills ====================== */
+html .gNWCoW_switch,
+html .ZKlsPq_switcherTrigger {
+  border-radius: var(--dsh-md3-radius-full) !important;
+}
+html .ZKlsPq_switcherTrigger {
+  transition: background-color var(--dsh-md3-duration-short) var(--dsh-md3-easing-standard);
+}
+html .ZKlsPq_switcherTrigger:hover {
+  background: var(--dsw-alias-interactive-bg-hover);
 }

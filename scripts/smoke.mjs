@@ -197,6 +197,23 @@ if (!bundleDirs.length) {
       if (existsSync(file)) haystack += readFileSync(file, "utf8");
     }
   }
+  // Also cover the harness core bundle and profile plugin packages (plain
+  // domain classes like `dsh_notification_checkbox` live there).
+  let store = [];
+  try {
+    store = readdirSync("/nix/store").filter((e) => e.includes("-dsh-"));
+  } catch { /* skip */ }
+  for (const entry of store.sort().reverse()) {
+    const main = `/nix/store/${entry}/lib/node_modules/@deepseek-ai/dsh/lib/client.js`;
+    if (existsSync(main)) { haystack += readFileSync(main, "utf8"); break; }
+  }
+  const profile = `${process.env.HOME}/.dsh/profiles/web/node_modules`;
+  try {
+    for (const pkg of readdirSync(profile)) {
+      const file = `${profile}/${pkg}/lib/client.js`;
+      if (pkg !== "dsh-md3-theme" && existsSync(file)) haystack += readFileSync(file, "utf8");
+    }
+  } catch { /* skip */ }
   const missing = foreignClasses.filter((c) => !haystack.includes(c));
   if (missing.length) {
     throw new Error(

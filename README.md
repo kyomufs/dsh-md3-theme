@@ -9,6 +9,10 @@ The plugin derives every color with Google's [`@material/material-color-utilitie
 - **Full MD3 palette, both modes** — surfaces, tonal containers, text ladder, outlines, primary/secondary/error roles for light *and* dark in every preset (44 tokens per scheme).
 - **MD3 elevation** — the harness shadow tokens are re-mapped to the Material 3 ambient + key pairs (level 1–3).
 - **MD3 shape scale** — dialogs 28px, cards 12px, bubbles 16px, menus 8px, buttons/chips/nav rows fully rounded, all driven by `--dsh-md3-radius-*` tokens.
+- **Interactive state layers** — every ghost/icon/text button, menu item, session row, settings row and composer control gets the M3 hover (8% on-surface) and pressed (12%) tonal layers via the theme-aware `interactive-bg-hover/active` tokens; filled buttons brighten on hover and compress on press.
+- **M3 checkbox & switch** — notification checkboxes become 20px/4px outlined boxes that fill primary with a white check when on; the settings switch uses the real M3 geometry (52×32 track, 16px thumb, tonal off / primary on).
+- **Lists & menus** — session rows, search results and history rows hover-tonal with a tinted secondary-container selection; menus are 8px surfaces with 4px padding, lv2 elevation and tonal item states; dropdown triggers and filter chips are fully rounded pills with a tinted selected state.
+- **M3 outlined inputs** — text/search/number fields get an outline-variant border that turns primary with a 2px focus ring.
 - **Motion** — dialogs scale-fade in with emphasised decelerate (400ms), menus fade in, interactive elements get standard state transitions, press scales controls down, hover raises cards a level. All durations/easings are MD3 tokens; `prefers-reduced-motion` disables animation entirely.
 - **Press ripple** — one delegated `pointerdown` listener injects a per-press ripple into any `<button>` (skipped for reduced-motion users, skipped while the theme is off).
 - **Focus & scrollbars** — 2px primary focus rings, thin rounded scrollbars, accent-tinted text selection.

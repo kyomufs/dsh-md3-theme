@@ -1,6 +1,6 @@
 /* dsh-md3-theme — motion layer (loaded last).
- * MD3 transition table: emphasised decel (enter 400ms), emphasised accel
- * (exit 200ms), standard (300ms). Transform animations are only attached to
+ * MD3 transition table: emphasised decel (enter 400ms), html emphasised accel
+ * (exit 200ms), html standard (300ms). Transform animations are only attached to
  * elements verified to be flex-centered (no transform-based positioning).
  */
 
@@ -27,35 +27,35 @@
 
 /* ===================== Enter animations ===================== */
 /* Settings dialog panel is flex-centered by its overlay (verified in DOM). */
-.VOzbGW_panel {
+html .VOzbGW_panel {
   animation: md3-dialog-in var(--dsh-md3-duration-emphasized-decel) var(--dsh-md3-easing-decel) both;
 }
 /* Generic dialogs: opacity-only (safe with any positioning scheme). */
-[role="dialog"]:not(.VOzbGW_panel) {
+html [role="dialog"]:not(.VOzbGW_panel) {
   animation: md3-fade-in var(--dsh-md3-duration-emphasized-decel) var(--dsh-md3-easing-decel) both;
 }
-[role="menu"],
-[role="listbox"] {
+html [role="menu"],
+html [role="listbox"] {
   animation: md3-menu-in var(--dsh-md3-duration-standard-decel) var(--dsh-md3-easing-standard-decel) both;
 }
 
 /* ===================== Hover elevation (MD3 level 1 on cards) ============ */
-.fsXYAq_card,
-.mna1RW_card,
-.mufS8W_card {
+html .fsXYAq_card,
+html .mna1RW_card,
+html .mufS8W_card {
   transition:
     box-shadow var(--dsh-md3-duration-medium) var(--dsh-md3-easing-standard),
     border-radius var(--dsh-md3-duration-standard) var(--dsh-md3-easing-standard);
 }
-.fsXYAq_card:hover,
-.mna1RW_card:hover,
-.mufS8W_card:hover {
+html .fsXYAq_card:hover,
+html .mna1RW_card:hover,
+html .mufS8W_card:hover {
   box-shadow: var(--dsw-shadow-lv1);
 }
 
 /* ===================== Ripple ===================== */
-/* One span per pointerdown, injected by the plugin's delegated listener. */
-.dsh-md3-ripple {
+/* One span per pointerdown, html injected by the plugin's delegated listener. */
+html .dsh-md3-ripple {
   position: absolute;
   border-radius: 50%;
   background: currentColor;
