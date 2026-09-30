@@ -494,3 +494,66 @@ html input.bhn1Oq_searchInput {
   border-radius: var(--dsh-md3-radius-full);
   background: var(--dsw-alias-bg-module-platform);
 }
+
+/* ===================== M3 tooltip ========================================= *
+ * Spec: extra-small (4dp) shape, label-medium type. The harness bubble keeps
+ * its inverse tooltip token colours (already theme-aware). */
+html [role="tooltip"],
+html ._bubble_1nw3t_1 {
+  border-radius: var(--dsh-md3-radius-xs);
+  padding: 6px 10px;
+  font-size: var(--dsh-md3-type-label-medium-size);
+  line-height: var(--dsh-md3-type-label-medium-lh);
+  font-weight: var(--dsh-md3-type-label-medium-weight);
+  letter-spacing: var(--dsh-md3-type-label-medium-track);
+}
+
+/* ===================== M3 tabs (docking strip) =========================== *
+ * M3 tabs: label-medium titles, fully rounded tonal indicator on the selected
+ * tab (selection = emphasized), icon-button chrome with state layers. */
+html [role="tablist"] {
+  gap: 4px;
+}
+html [role="tab"] {
+  border-radius: var(--dsh-md3-radius-full);
+  font-size: var(--dsh-md3-type-label-medium-size);
+  line-height: var(--dsh-md3-type-label-medium-lh);
+  font-weight: var(--dsh-md3-type-label-medium-weight);
+  letter-spacing: var(--dsh-md3-type-label-medium-track);
+  transition:
+    background-color var(--dsh-md3-dur-effects) var(--dsh-md3-spring-effects),
+    color var(--dsh-md3-dur-effects) var(--dsh-md3-spring-effects);
+}
+html [role="tab"]:hover,
+html ._tab_17p4l_156:hover {
+  background: var(--dsw-alias-interactive-bg-hover);
+}
+html [role="tab"][aria-selected="true"],
+html ._tabActive_17p4l_243 {
+  background: var(--dsw-alias-state-business-tertiary);
+  color: var(--dsw-alias-state-business-primary);
+  font-weight: 600;
+}
+html ._addTab_17p4l_346,
+html ._tabClose_17p4l_314 {
+  border-radius: var(--dsh-md3-radius-full);
+  transition: background-color var(--dsh-md3-dur-effects) var(--dsh-md3-spring-effects);
+}
+html ._addTab_17p4l_346:hover,
+html ._tabClose_17p4l_314:hover {
+  background: var(--dsw-alias-interactive-bg-hover);
+}
+
+/* ===================== M3 snackbar (toast) =============================== *
+ * Spec: extra-small (4dp) shape, body-medium type, 48dp min height; the
+ * harness already uses inverse-style tokens for its colours — keep them, as
+ * well as its own in/fade animation chain (its exit timing depends on it). */
+html [role="alert"] {
+  border-radius: var(--dsh-md3-radius-xs);
+  padding-top: 14px;
+  padding-bottom: 14px;
+  font-size: var(--dsh-md3-type-body-medium-size);
+  line-height: var(--dsh-md3-type-body-medium-lh);
+  letter-spacing: var(--dsh-md3-type-body-medium-track);
+  font-weight: 400;
+}

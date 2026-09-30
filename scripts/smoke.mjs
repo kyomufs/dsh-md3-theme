@@ -214,6 +214,16 @@ if (!bundleDirs.length) {
       if (pkg !== "dsh-md3-theme" && existsSync(file)) haystack += readFileSync(file, "utf8");
     }
   } catch { /* skip */ }
+  // Cover the built web frontend (docking/tooltip components ship as hashed
+  // CSS modules inside dist/assets, not as lib/client.js packages).
+  for (const entry of store.sort().reverse()) {
+    const assets = `/nix/store/${entry}/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-web-frontend/dist/assets`;
+    if (!existsSync(assets)) continue;
+    for (const file of readdirSync(assets)) {
+      if (/\.(js|css)$/.test(file)) haystack += readFileSync(`${assets}/${file}`, "utf8");
+    }
+    break;
+  }
   const missing = foreignClasses.filter((c) => !haystack.includes(c));
   if (missing.length) {
     throw new Error(

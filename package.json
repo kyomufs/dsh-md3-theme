@@ -1,6 +1,6 @@
 {
   "name": "dsh-md3-theme",
-  "version": "0.4.0",
+  "version": "0.4.2",
   "description": "Material Design 3 theme for DeepSeek Harness: HCT-generated light/dark palettes with seven accent presets, applied through the theme token layer.",
   "keywords": [
     "deepseek-harness",
