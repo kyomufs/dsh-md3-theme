@@ -1,19 +1,37 @@
 // Smoke test: load lib/client.js the way the module loader does, run apply()
 // with a mocked ctx, and exercise the settings row end-to-end. Catches API
 // misuse (like calling actions on the store handle) before installing.
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync, existsSync } from "node:fs";
 import vm from "node:vm";
 
 const code = readFileSync("lib/client.js", "utf8");
 
 let entry = null;
+const styleTags = [];
+const listeners = [];
 const context = {
   console,
-  window: { __ModuleLoader__: { load: (e) => { entry = e; } } },
+  window: {
+    __ModuleLoader__: { load: (e) => { entry = e; } },
+    matchMedia: () => ({ matches: false }),
+  },
   document: {
-    createElement: () => ({ dataset: {}, textContent: "", remove() {} }),
-    head: { appendChild() {} },
+    createElement: (tag) => ({
+      tagName: tag,
+      dataset: {},
+      textContent: "",
+      remove() {
+        const i = styleTags.indexOf(this);
+        if (i >= 0) styleTags.splice(i, 1);
+      },
+    }),
+    head: { appendChild: (el) => styleTags.push(el) },
     querySelector: () => null,
+    addEventListener: (type, fn) => listeners.push([type, fn]),
+    removeEventListener: (type, fn) => {
+      const i = listeners.findIndex(([t, f]) => t === type && f === fn);
+      if (i >= 0) listeners.splice(i, 1);
+    },
   },
   localStorage: {
     store: { "dsh-md3-theme": JSON.stringify({ enabled: true, accent: "teal" }) },
@@ -96,6 +114,23 @@ injectedResult.setEnabled(false);
 console.log("update: ok; localStorage =", context.localStorage.store["dsh-md3-theme"]);
 console.log("theme re-applies:", themeCalls.filter((c) => c.source).length, "disposed:", themeCalls.filter((c) => c.disposed).length);
 
+// Style layer: mounted while enabled, unmounted on disable, remounted on
+// enable, and every tag carries the plugin identity for lifecycle tracking.
+const md3Tags = () =>
+  styleTags.filter((t) => t.dataset.pluginCss && t.dataset.pluginCss.startsWith("dsh-md3-theme/"));
+if (md3Tags().length) throw new Error("style layer must unmount when the theme is disabled");
+injectedResult.setEnabled(true);
+const mounted = md3Tags();
+if (!mounted.length) throw new Error("style layer must mount when the theme is enabled");
+for (const tag of mounted) {
+  if (tag.dataset.plugin !== "dsh-md3-theme") throw new Error("style tag missing data-plugin");
+  if (!tag.textContent.trim()) throw new Error("style tag mounted with empty css: " + tag.dataset.pluginCss);
+}
+console.log("style layer: ok (" + mounted.map((t) => t.dataset.pluginCss.split("/")[1]).join(", ") + ")");
+
+if (!listeners.some(([type]) => type === "pointerdown")) throw new Error("ripple listener not installed");
+console.log("ripple: ok (delegated pointerdown listener installed)");
+
 // Render the row once (mock useStore reads from a fixed state).
 const row = slotSlots.component({
   t: (k) => k,
@@ -116,5 +151,61 @@ for (const palette of Object.values(MD3_PALETTES)) {
 }
 if (unknownTokens.size) throw new Error(`unknown token names: ${[...unknownTokens].join(", ")}`);
 console.log("token names: ok (" + baseTokens.size + " known base tokens)");
+
+// ---- Selector registry: module classes referenced by the CSS layer must
+// still exist in the installed harness bundles. A dsh update that renames a
+// class fails this check instead of silently breaking the theme.
+const cssFiles = readdirSync("src/styles").filter((f) => f.endsWith(".css"));
+const classRe = /\.[A-Za-z_][A-Za-z0-9-]*(?:_[A-Za-z0-9-]+)+/g;
+const usedClasses = new Set();
+for (const f of cssFiles) {
+  const css = readFileSync(`src/styles/${f}`, "utf8");
+  for (const m of css.matchAll(classRe)) usedClasses.add(m[0].slice(1));
+}
+const ownClasses = [...usedClasses].filter((c) => c.startsWith("dsh-md3-"));
+const foreignClasses = [...usedClasses].filter((c) => !c.startsWith("dsh-md3-"));
+
+function findBundleDirs() {
+  const dirs = [];
+  if (process.env.DSH_CLIENT_BUNDLES && existsSync(process.env.DSH_CLIENT_BUNDLES)) {
+    dirs.push(process.env.DSH_CLIENT_BUNDLES);
+    return dirs;
+  }
+  // Locate @deepseek-ai/dsh/node_modules/@deepseek-ai in any installed dsh.
+  let store = [];
+  try {
+    store = readdirSync("/nix/store").filter((e) => e.includes("-dsh-"));
+  } catch { /* not on nix: fall through to skip */ }
+  for (const entry of store.sort().reverse()) {
+    const p = `/nix/store/${entry}/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai`;
+    if (existsSync(p) && existsSync(`${p}/dsh-client-ui-theme/lib/client.js`)) {
+      dirs.push(p);
+      break;
+    }
+  }
+  return dirs;
+}
+
+const bundleDirs = findBundleDirs();
+if (!bundleDirs.length) {
+  console.warn("WARNING: harness bundles not found — selector registry check skipped");
+} else {
+  let haystack = "";
+  for (const dir of bundleDirs) {
+    for (const pkg of readdirSync(dir)) {
+      const file = `${dir}/${pkg}/lib/client.js`;
+      if (existsSync(file)) haystack += readFileSync(file, "utf8");
+    }
+  }
+  const missing = foreignClasses.filter((c) => !haystack.includes(c));
+  if (missing.length) {
+    throw new Error(
+      `selector classes missing from harness bundles (dsh update drift?): ${missing.join(", ")}`,
+    );
+  }
+  console.log(
+    `selector registry: ok (${foreignClasses.length} foreign classes, ${ownClasses.length} own, ${foreignClasses.length - missing.length} found)`,
+  );
+}
 
 console.log("SMOKE_OK");

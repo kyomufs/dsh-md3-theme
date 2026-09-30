@@ -1,24 +1,23 @@
 # dsh-md3-theme
 
-Material Design 3 (Material You) theme for [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) — HCT-generated light and dark palettes with seven accent presets, applied through the harness theme-token layer.
+Full Material Design 3 (Material You) theme for [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) — HCT-generated light/dark palettes with seven accent presets **plus a component restyle**: the MD3 shape scale, elevation shadows, motion (enter animations, state transitions, press feedback), focus indicators, scrollbars and press ripple.
 
-The plugin derives every color with Google's [`@material/material-color-utilities`](https://github.com/material-foundation/material-color-utilities) (HCT color space) from a seed color, maps the resulting Material 3 color roles onto the harness `--dsw-*` semantic tokens, and layers them over the active theme via `ctx.theme.overrideTokens`. The built-in light/dark/system preference keeps working exactly as before.
+The plugin derives every color with Google's [`@material/material-color-utilities`](https://github.com/material-foundation/material-color-utilities) (HCT color space) from a seed color, maps the resulting Material 3 color roles onto the harness `--dsw-*` semantic tokens, and layers them over the active theme via `ctx.theme.overrideTokens`. On top of that, three CSS layers (core → components → motion) mount as `style[data-plugin-css]` tags while the theme is on. The built-in light/dark/system preference keeps working exactly as before.
 
 ## Features
 
-- **Full MD3 palette, both modes** — surfaces, tonal containers, text ladder, outlines, primary/secondary/error roles for light *and* dark in every preset.
+- **Full MD3 palette, both modes** — surfaces, tonal containers, text ladder, outlines, primary/secondary/error roles for light *and* dark in every preset (44 tokens per scheme).
+- **MD3 elevation** — the harness shadow tokens are re-mapped to the Material 3 ambient + key pairs (level 1–3).
+- **MD3 shape scale** — dialogs 28px, cards 12px, bubbles 16px, menus 8px, buttons/chips/nav rows fully rounded, all driven by `--dsh-md3-radius-*` tokens.
+- **Motion** — dialogs scale-fade in with emphasised decelerate (400ms), menus fade in, interactive elements get standard state transitions, press scales controls down, hover raises cards a level. All durations/easings are MD3 tokens; `prefers-reduced-motion` disables animation entirely.
+- **Press ripple** — one delegated `pointerdown` listener injects a per-press ripple into any `<button>` (skipped for reduced-motion users, skipped while the theme is off).
+- **Focus & scrollbars** — 2px primary focus rings, thin rounded scrollbars, accent-tinted text selection.
 - **Seven accent presets** — DeepSeek Blue, Material Purple, Teal, Green, Rose, Orange, Graphite. Switch live from Settings; no reload.
 - **Settings row** — enable/disable switch plus the accent grid in *Settings → General → Material 3*.
-- **Zero hard-coded changes** — the plugin only layers tokens; disable it and the stock palette returns untouched.
+- **Clean toggle** — disabling unmounts every style tag and the ripple listener; the stock UI returns untouched (verified: composer radius goes 16px → 22px → 16px across off/on cycles).
 - **Persistence** — the choice is stored in `localStorage` per browser.
 
 ## Install
-
-From npm (after publish):
-
-```bash
-dsh plugin --profile web add npm:dsh-md3-theme
-```
 
 From GitHub:
 
@@ -57,28 +56,35 @@ The stock color-scheme switch (light/dark/system) continues to control which of 
 
 ## How it works
 
-1. `scripts/generate-palettes.mjs` builds light/dark `DynamicScheme`s for every preset and maps MD3 roles onto 41 `--dsw-*` tokens (`lib/palettes.js` for the host, `lib/client-palettes.js` spliced into the client bundle).
-2. The client half (`src/client.js`) registers a settings row and calls `ctx.theme.overrideTokens('dsh-md3-theme', tokens)` — one layer per apply; disposing the layer restores the base theme.
-3. The host half (`lib/index.js`) only mounts the package so the composition loads its `dsh.client` bundle.
+1. `scripts/generate-palettes.mjs` builds light/dark `DynamicScheme`s for every preset and maps MD3 color roles (plus the M3 elevation shadows) onto 44 `--dsw-*` tokens (`lib/palettes.js` for the host, `lib/client-palettes.js` spliced into the client bundle).
+2. The client half (`src/client.js`) registers a settings row and runs one *runtime* per apply: `ctx.theme.overrideTokens('dsh-md3-theme', tokens)` for color, and a style manager that mounts/unmounts the three CSS layers and the ripple listener.
+3. The CSS lives in `src/styles/` and is inlined by `build.mjs` in load order:
+   - `core.css` — motion/shape token declarations, focus rings, state transitions, press scale, scrollbars, selection, reduced-motion guard;
+   - `components.css` — component restyle keyed on stable hooks: `role`/`aria-*`, `data-*` attributes, and hashed module classes;
+   - `motion.css` — enter animations (dialog scale-fade, menu fade), hover elevation, ripple keyframes.
+4. The host half (`lib/index.js`) only mounts the package so the composition loads its `dsh.client` bundle.
+
+### Selector policy
+
+Stable hooks first (`[role="dialog"]`, `button[aria-haspopup="menu"]`, `[data-composer-card]`, …). Hashed css-module classes (`.VOzbGW_panel`, `.uV2eYG_primary`, …) are allowed only when they survive the smoke test: `scripts/smoke.mjs` extracts every module class the CSS references and greps it against the installed harness bundles (`@deepseek-ai/dsh-client-*`). A dsh update that renames a class fails `npm run check` instead of silently breaking the theme — add `DSH_CLIENT_BUNDLES=/path/to/@deepseek-ai` to point the check at a specific install.
 
 ### Token mapping
 
-Mapped: backgrounds and tonal containers (`bg-base`, `bg-layer-1..3`, overlays), brand/primary buttons, ghost/tonal/FAB/elevated/contrast buttons, the five-step text ladder (`label-*`), links, business/error states, toasts, and component surfaces (user bubble, inputs, selector, sidebar).
+Mapped: backgrounds and tonal containers (`bg-base`, `bg-layer-1..3`, overlays), brand/primary buttons, ghost/tonal/FAB/elevated/contrast buttons, the five-step text ladder (`label-*`), links, business/error states, toasts, component surfaces (user bubble, inputs, selector, sidebar), and the four `--dsw-shadow-lv*` tokens (M3 ambient + key pairs).
 
 Deliberately untouched: neutral alpha borders/masks/skeletons, MD3 state layers (`interactive-bg-*`), success/warn colors (MD3 defines no such roles), markdown/code colors, and inverted tokens — they already read correctly against both palettes.
 
-Known harness limits: corner radii are not tokenized (only the global superellipse `corner-shape`), the type scale is the harness's own (MD3 type styles do not map 1:1), and component state layers/motion live in component CSS — this plugin is a palette retokenization, not a component restyle.
+Known limits: the harness type scale is its own (MD3 type styles do not map 1:1 onto `--dsw-font-*`), markdown text styles stay on the harness scale, and third-party plugin components are not targeted (registry check only covers harness bundles).
 
 ## Development
 
 ```bash
 npm install
 npm run generate   # rebuild lib/palettes.js + lib/client-palettes.js from seeds
-npm run build      # splice palettes + src/client.js into lib/client.js
-npm run check      # generate + build + syntax-check + loader smoke test
+npm run build      # inline CSS layers + splice palettes + src/client.js into lib/client.js
+npm run check      # generate + build + syntax-check + smoke (store/slot API, style
+                   # layer lifecycle, ripple listener, token names, selector registry)
 ```
-
-The smoke test (`scripts/smoke.mjs`) loads `lib/client.js` through the same module-loader wrapper the harness uses and runs `apply()` plus the settings row against a mocked context — it catches store/slot API misuse before an install ever sees it.
 
 Client edits need only a page reload (bundles are served with `no-cache`); host/package metadata changes need a server restart.
 

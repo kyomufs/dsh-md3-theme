@@ -58,13 +58,83 @@ function toOverrides(palette) {
   return overrides;
 }
 
+// ---------------------------------------------------------------------------
+// Ripple: one delegated pointerdown listener injects a span per press on a
+// <button>; the CSS layer animates it. Skips reduced-motion users. Mounted
+// together with the style layer so a disabled theme leaves nothing behind.
+// ---------------------------------------------------------------------------
+function createRippleHandler() {
+  if (typeof document === "undefined" || typeof document.addEventListener !== "function") {
+    return null;
+  }
+  const handler = (event) => {
+    if (event.button !== undefined && event.button !== 0) return;
+    if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const target = event.target && event.target.closest ? event.target.closest("button") : null;
+    if (!target || target.disabled || target.matches(":disabled")) return;
+    if (target.querySelector && target.querySelector(".dsh-md3-ripple")) return;
+    const rect = target.getBoundingClientRect();
+    if (!rect.width || !rect.height) return;
+    const size = Math.max(rect.width, rect.height) * 1.1;
+    const span = document.createElement("span");
+    span.className = "dsh-md3-ripple";
+    span.style.width = size + "px";
+    span.style.height = size + "px";
+    span.style.left = (event.clientX - rect.left - size / 2) + "px";
+    span.style.top = (event.clientY - rect.top - size / 2) + "px";
+    if (getComputedStyle(target).position === "static") target.style.position = "relative";
+    target.appendChild(span);
+    const drop = () => span.remove();
+    span.addEventListener("animationend", drop);
+    setTimeout(drop, 700); // safety net if the animation never fires
+  };
+  document.addEventListener("pointerdown", handler, true);
+  return () => document.removeEventListener("pointerdown", handler, true);
+}
+
+// ---------------------------------------------------------------------------
+// Style layer: the MD3 CSS files mount as style[data-plugin-css] tags while
+// the theme is enabled and unmount on toggle-off / context dispose, so
+// disabling the theme restores the stock UI. The ripple handler follows the
+// same switch.
+// ---------------------------------------------------------------------------
+function createRuntime(ctx) {
+  let tags = [];
+  let removeRipple = null;
+  const set = (active) => {
+    for (const tag of tags) tag.remove();
+    tags = [];
+    if (removeRipple) {
+      removeRipple();
+      removeRipple = null;
+    }
+    if (!active || typeof document === "undefined") return;
+    for (const name of MD3_CSS_ORDER) {
+      const css = MD3_CSS[name];
+      if (!css) continue;
+      const tag = document.createElement("style");
+      tag.dataset.plugin = SOURCE;
+      tag.dataset.pluginCss = SOURCE + "/" + name;
+      tag.textContent = css;
+      document.head.appendChild(tag);
+      tags.push(tag);
+    }
+    removeRipple = createRippleHandler();
+  };
+  ctx.effect(() => () => set(false), SOURCE + ": md3 style layer");
+  return { set };
+}
+
+// One palette override + CSS layer per (re)apply.
 function createThemeApplier(ctx) {
+  const runtime = createRuntime(ctx);
   let dispose = null;
   return function applyState(state) {
     if (dispose) {
       dispose();
       dispose = null;
     }
+    runtime.set(state.enabled);
     if (!state.enabled) return;
     const palette = MD3_PALETTES[state.accent];
     if (!palette) return;
@@ -182,13 +252,13 @@ function apply(ctx) {
       ctx.locale.register(LOCALE_NS, {
         en: {
           title: "Material 3",
-          "hint.enabled": "MD3 palette applied to light and dark themes.",
-          "hint.disabled": "Theme off — DeepSeek default palette.",
+          "hint.enabled": "Full MD3 applied: palette, shape, elevation, motion, ripple.",
+          "hint.disabled": "Theme off — DeepSeek default UI.",
         },
         ru: {
           title: "Material 3",
-          "hint.enabled": "Палитра MD3 применена к светлой и тёмной теме.",
-          "hint.disabled": "Тема выключена — стандартная палитра DeepSeek.",
+          "hint.enabled": "Применён полный MD3: палитра, форма, тени, анимации, ripple.",
+          "hint.disabled": "Тема выключена — стандартный интерфейс DeepSeek.",
         },
       }),
     SOURCE + ": locale dictionaries",

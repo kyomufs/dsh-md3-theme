@@ -38,6 +38,23 @@ const VARIANTS = {
 };
 
 // ---------------------------------------------------------------------------
+// Material 3 elevation shadows (ambient + key pair per level). The base theme
+// ships much fainter shadows (5% black); M3 defines explicit elevations so
+// dialogs/menus read as raised surfaces. Scheme-invariant: MD3 keeps the same
+// shadow pair in light and dark.
+// ---------------------------------------------------------------------------
+const MD3_ELEVATION = {
+  // level 1: menus, buttons at rest-raise
+  lv1: '0 1px 2px 0 rgb(0 0 0 / 0.3), 0 1px 3px 1px rgb(0 0 0 / 0.15)',
+  // split-out ambient part (the base theme splits lv1 into lv1 + lv1-blur)
+  lv1Blur: '0 1px 3px 1px rgb(0 0 0 / 0.15)',
+  // level 2: FAB, raised cards
+  lv2: '0 1px 2px 0 rgb(0 0 0 / 0.3), 0 2px 6px 2px rgb(0 0 0 / 0.15)',
+  // level 3: dialogs, pickers
+  lv3: '0 4px 8px 3px rgb(0 0 0 / 0.15), 0 8px 12px 6px rgb(0 0 0 / 0.15)',
+};
+
+// ---------------------------------------------------------------------------
 // Color helpers (sRGB — same space the state-layer spec uses).
 // ---------------------------------------------------------------------------
 const toRgb = (argb) => [(argb >> 16) & 0xff, (argb >> 8) & 0xff, argb & 0xff];
@@ -105,8 +122,7 @@ function buildTokenMap(mdc, scheme) {
 
   return {
     // --- surfaces: tonal containers replace elevation shading --------------
-    '--dsw-alias-bg-base': hexFromArgb(R.surface),
-    '--dsw-alias-bg-layer-1': hexFromArgb(scheme.isDark ? R.surfaceContainer : R.surfaceContainerLowest),
+    '--dsw-alias-bg-base': hexFromArgb(R.surface),    '--dsw-alias-bg-layer-1': hexFromArgb(scheme.isDark ? R.surfaceContainer : R.surfaceContainerLowest),
     '--dsw-alias-bg-layer-2': hexFromArgb(scheme.isDark ? R.surfaceContainerHigh : R.surfaceContainerLow),
     '--dsw-alias-bg-layer-3': hexFromArgb(scheme.isDark ? R.surfaceContainerHighest : R.surfaceContainer),
     '--dsw-alias-bg-module-platform': hexFromArgb(scheme.isDark ? R.surfaceContainerHigh : R.surfaceContainerLow),
@@ -168,6 +184,12 @@ function buildTokenMap(mdc, scheme) {
     ),
     '--dsw-specific-sidebar-nav-item-active': hexFromArgb(R.secondaryContainer),
     '--dsw-specific-sidebar-nav-item-active-accent': hexFromArgb(R.secondaryContainer),
+
+    // --- elevation (MD3 ambient + key shadows; scheme-invariant) ------------
+    '--dsw-shadow-lv1': MD3_ELEVATION.lv1,
+    '--dsw-shadow-lv1-blur': MD3_ELEVATION.lv1Blur,
+    '--dsw-shadow-lv2': MD3_ELEVATION.lv2,
+    '--dsw-shadow-lv3': MD3_ELEVATION.lv3,
 
     // --- typography (Roboto is the MD3 default typeface) ----------------------
     '--dsw-font-family':

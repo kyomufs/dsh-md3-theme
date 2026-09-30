@@ -1,0 +1,105 @@
+/* dsh-md3-theme — core layer.
+ * Mounted only while the theme is enabled (the plugin unmounts the whole
+ * layer on toggle-off and on context dispose), so every rule here is global.
+ * Layer order: core -> components -> motion (later wins at equal weight).
+ */
+
+/* --- MD3 motion tokens (consumed by the components/motion layers) --------- */
+:root {
+  /* State feedback (hover/press/focus micro-transitions). */
+  --dsh-md3-duration-short: 150ms;
+  --dsh-md3-duration-medium: 200ms;
+  /* MD3 transition table (enter/exit/utility). */
+  --dsh-md3-duration-emphasized: 500ms;
+  --dsh-md3-duration-emphasized-decel: 400ms; /* enter */
+  --dsh-md3-duration-emphasized-accel: 200ms; /* exit */
+  --dsh-md3-duration-standard: 300ms;
+  --dsh-md3-duration-standard-decel: 250ms;
+  --dsh-md3-duration-standard-accel: 200ms;
+  --dsh-md3-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+  --dsh-md3-easing-decel: cubic-bezier(0.05, 0.7, 0.1, 1);
+  --dsh-md3-easing-accel: cubic-bezier(0.3, 0, 0.8, 0.15);
+  --dsh-md3-easing-standard-decel: cubic-bezier(0, 0, 0, 1);
+  --dsh-md3-easing-standard-accel: cubic-bezier(0.3, 0, 1, 1);
+
+  /* MD3 shape scale: extra-small / small / medium / large / extra-large. */
+  --dsh-md3-radius-xs: 4px;  /* chips, snackbars */
+  --dsh-md3-radius-s: 8px;   /* text fields, menus */
+  --dsh-md3-radius-m: 12px;  /* cards */
+  --dsh-md3-radius-l: 16px;  /* FAB, nav drawer */
+  --dsh-md3-radius-xl: 28px; /* dialogs, bottom sheets */
+  --dsh-md3-radius-full: 9999px; /* buttons, pills, badges */
+}
+
+/* --- Focus: MD3 2px primary indicator on every keyboard focus ------------ */
+html :focus-visible {
+  outline: 2px solid var(--dsw-alias-brand-primary);
+  outline-offset: 2px;
+}
+
+/* --- State motion: interactive elements fade color layers the MD3 way ---- */
+/* Covers bare elements; component classes with their own transitions keep
+ * theirs (higher specificity wins) — this is the fallback baseline. */
+button,
+a,
+[role="button"],
+[role="switch"],
+[role="tab"],
+[role="menuitem"],
+[role="option"],
+[role="checkbox"],
+[role="radio"] {
+  transition:
+    background-color var(--dsh-md3-duration-short) var(--dsh-md3-easing-standard),
+    border-color var(--dsh-md3-duration-short) var(--dsh-md3-easing-standard),
+    color var(--dsh-md3-duration-short) var(--dsh-md3-easing-standard),
+    box-shadow var(--dsh-md3-duration-short) var(--dsh-md3-easing-standard),
+    opacity var(--dsh-md3-duration-short) var(--dsh-md3-easing-standard),
+    transform var(--dsh-md3-duration-short) var(--dsh-md3-easing-standard);
+}
+
+/* --- Press: MD3 emphasised touch feedback (scale, 100ms) ----------------- */
+button:active:not(:disabled),
+[role="button"]:active,
+[role="switch"]:active,
+[role="tab"]:active {
+  transform: scale(0.97);
+  transition-duration: 100ms;
+}
+
+/* --- Scrollbars: thin MD3 rails with pill thumbs ------------------------- */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--dsw-alias-border-l4) transparent;
+}
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--dsw-alias-border-l4);
+  border-radius: var(--dsh-md3-radius-full);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--dsw-alias-interactive-bg-hover);
+}
+
+/* --- Text selection tinted with the active accent ------------------------ */
+::selection {
+  background: color-mix(in srgb, var(--dsw-alias-brand-primary) 28%, transparent);
+}
+
+/* --- Accessibility: kill motion for users who ask for it ----------------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+}

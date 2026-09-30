@@ -1,0 +1,132 @@
+/* dsh-md3-theme — components layer.
+ * Selector policy: role/aria/data-* hooks first; hashed module classes only
+ * when listed in scripts/selectors.json (the smoke test greps the installed
+ * harness bundles for each of them, so a dsh update that drops a class fails
+ * `npm run check` instead of silently breaking the UI).
+ */
+
+/* ===================== Overlays: dialogs ===================== */
+[role="dialog"] {
+  border-radius: var(--dsh-md3-radius-xl);
+  box-shadow: var(--dsw-shadow-lv3);
+}
+.VOzbGW_overlay {
+  animation: md3-fade-in var(--dsh-md3-duration-standard-decel) both;
+}
+.VOzbGW_panel {
+  border-radius: var(--dsh-md3-radius-xl);
+  box-shadow: var(--dsw-shadow-lv3);
+}
+
+/* ===================== Menus and listboxes ===================== */
+[role="menu"],
+[role="listbox"] {
+  border-radius: var(--dsh-md3-radius-s);
+  box-shadow: var(--dsw-shadow-lv2);
+}
+[role="menu"] [role="menuitem"],
+[role="listbox"] [role="option"] {
+  border-radius: var(--dsh-md3-radius-xs);
+}
+[role="menu"] [role="menuitem"]:hover,
+[role="listbox"] [role="option"]:hover {
+  background: var(--dsw-alias-interactive-bg-hover);
+}
+
+/* ===================== Settings dialog internals ===================== */
+/* Nav drawer items become fully rounded MD3 rows. */
+.VOzbGW_navCell {
+  border-radius: var(--dsh-md3-radius-full);
+}
+.VOzbGW_navCell:not(.VOzbGW_active):hover {
+  background: var(--dsw-alias-interactive-bg-hover);
+}
+
+/* ===================== Trigger buttons → pills ===================== */
+button[aria-haspopup="menu"],
+button[aria-haspopup="listbox"],
+button[aria-haspopup="dialog"],
+button[aria-haspopup="true"] {
+  border-radius: var(--dsh-md3-radius-full);
+}
+.Sh0Q9G_trigger,
+._7KE1Ra_trigger,
+.oY77xG_selector,
+.hVGvvW_selector,
+.lats3W_selector,
+.T1PP_q_selector,
+.pXSMma_workspace,
+.cubgiG_seat {
+  border-radius: var(--dsh-md3-radius-full);
+}
+
+/* ===================== Sidebar rows ===================== */
+.hHd-Xa_newSession,
+.hHd-Xa_panelRow {
+  border-radius: var(--dsh-md3-radius-full);
+}
+
+/* ===================== Composer ===================== */
+[data-composer-card] {
+  border-radius: var(--dsh-md3-radius-l);
+}
+[data-composer-card]:focus-within {
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--dsw-alias-brand-primary) 55%, transparent);
+}
+.uV2eYG_primary {
+  transition:
+    transform var(--dsh-md3-duration-short) var(--dsh-md3-easing-standard),
+    box-shadow var(--dsh-md3-duration-short) var(--dsh-md3-easing-standard),
+    background-color var(--dsh-md3-duration-short) var(--dsh-md3-easing-standard);
+}
+.uV2eYG_primary:hover:not(:disabled) {
+  box-shadow: var(--dsw-shadow-lv1);
+}
+.uV2eYG_primary:active:not(:disabled) {
+  transform: scale(0.96);
+}
+.uV2eYG_add:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--dsw-alias-state-business-tertiary) 80%, var(--dsw-alias-label-primary));
+}
+
+/* ===================== Cards → medium (12px) ===================== */
+.Sixlwa_fileCard,
+.mna1RW_card,
+.mufS8W_card,
+.uV2eYG_notice,
+.fsXYAq_card {
+  border-radius: var(--dsh-md3-radius-m);
+}
+
+/* ===================== Message bubbles → large (16px) ===================== */
+.Sixlwa_bubble {
+  border-radius: var(--dsh-md3-radius-l);
+}
+
+/* ===================== Chips and pills → full ===================== */
+.bOPqQW_pill,
+.yAWgPa_chip,
+.JObwrW_trigger,
+.JObwrW_bar,
+.xzv4MW_action,
+.Q51KRG_trigger {
+  border-radius: var(--dsh-md3-radius-full);
+}
+
+/* ===================== Tool rows ===================== */
+.o3BgMG_row {
+  border-radius: var(--dsh-md3-radius-s);
+}
+.o3BgMG_row:hover {
+  background: var(--dsw-alias-interactive-bg-hover);
+}
+
+/* ===================== Modal text input → small (8px) ===================== */
+.pXSMma_modalInput {
+  border-radius: var(--dsh-md3-radius-s);
+}
+
+/* ===================== Appearance theme cards → large (16px) ============== */
+._8HJdBW_themeCube {
+  border-radius: var(--dsh-md3-radius-l);
+}
