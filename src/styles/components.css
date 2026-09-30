@@ -52,7 +52,11 @@ html .VOzbGW_close,
 html .EvIC1a_older button,
 html [data-dockkit-add-tab],
 html .t1T8VW_copy,
-html .dsh_notification_buttonGhost {
+html .dsh_notification_buttonGhost,
+html ._8HJdBW_themeCube,
+html .zGbnIq_addButton,
+html .zGbnIq_modelEmpty,
+html .rtSEdW_creatorButton {
   transition:
     background-color var(--dsh-md3-dur-effects) var(--dsh-md3-spring-effects),
     transform var(--dsh-md3-dur-spatial-fast) var(--dsh-md3-spring-spatial-fast);
@@ -67,7 +71,11 @@ html .VOzbGW_close:hover:not(:disabled),
 html .EvIC1a_older button:hover:not(:disabled),
 html [data-dockkit-add-tab]:hover:not(:disabled),
 html .t1T8VW_copy:hover:not(:disabled),
-html .dsh_notification_buttonGhost:hover:not(:disabled) {
+html .dsh_notification_buttonGhost:hover:not(:disabled),
+html ._8HJdBW_themeCube:hover:not(:disabled),
+html .zGbnIq_addButton:hover:not(:disabled),
+html .zGbnIq_modelEmpty:hover:not(:disabled),
+html .rtSEdW_creatorButton:hover:not(:disabled) {
   background: var(--dsw-alias-interactive-bg-hover);
 }
 html .hHd-Xa_iconButton:active:not(:disabled),
@@ -77,7 +85,11 @@ html .bhn1Oq_iconButton:active:not(:disabled),
 html .P3OORG_iconButton:active:not(:disabled),
 html .VOzbGW_close:active:not(:disabled),
 html .t1T8VW_copy:active:not(:disabled),
-html .dsh_notification_buttonGhost:active:not(:disabled) {
+html .dsh_notification_buttonGhost:active:not(:disabled),
+html ._8HJdBW_themeCube:active:not(:disabled),
+html .zGbnIq_addButton:active:not(:disabled),
+html .zGbnIq_modelEmpty:active:not(:disabled),
+html .rtSEdW_creatorButton:active:not(:disabled) {
   background: var(--dsw-alias-interactive-bg-active);
 }
 
@@ -295,9 +307,11 @@ html input[type="checkbox"].dsh_notification_checkbox:checked {
   background-repeat: no-repeat;
 }
 
-/* ===================== Text inputs → M3 outlined ========================== */
-html input[type="text"]:not([class*="dsh-md3-"]),
-html input[type="search"]:not([class*="dsh-md3-"]),
+/* ===================== Text inputs → M3 outlined ========================== *
+ * The sidebar search input is excluded — it renders as an M3 search bar
+ * (own section below) and the outlined-field rule out-specified it. */
+html input[type="text"]:not([class*="dsh-md3-"]):not(.bhn1Oq_searchInput),
+html input[type="search"]:not([class*="dsh-md3-"]):not(.bhn1Oq_searchInput),
 html input[type="number"]:not([class*="dsh-md3-"]) {
   border: 1px solid var(--dsw-alias-border-l2);
   border-radius: var(--dsh-md3-radius-s);
@@ -305,8 +319,8 @@ html input[type="number"]:not([class*="dsh-md3-"]) {
     border-color var(--dsh-md3-dur-effects) var(--dsh-md3-spring-effects),
     box-shadow var(--dsh-md3-dur-effects) var(--dsh-md3-spring-effects);
 }
-html input[type="text"]:not([class*="dsh-md3-"]):focus,
-html input[type="search"]:not([class*="dsh-md3-"]):focus,
+html input[type="text"]:not([class*="dsh-md3-"]):not(.bhn1Oq_searchInput):focus,
+html input[type="search"]:not([class*="dsh-md3-"]):not(.bhn1Oq_searchInput):focus,
 html input[type="number"]:not([class*="dsh-md3-"]):focus {
   outline: none;
   border-color: var(--dsw-alias-state-business-primary);
@@ -440,4 +454,43 @@ html .dsh_notification_buttonPri {
 html .dsh_notification_badge {
   font-weight: var(--dsh-md3-type-label-medium-emph-weight);
   letter-spacing: var(--dsh-md3-type-label-medium-track);
+}
+
+/* ===================== Outlined buttons: kill the dashed style =========== *
+ * The harness's "add" placeholders draw dashed borders (not an M3 pattern).
+ * They become proper M3 outlined buttons: solid outline-variant stroke, full
+ * corner, label type, and tonal state layers (added to the group above). */
+html .zGbnIq_addButton,
+html .zGbnIq_modelEmpty,
+html .rtSEdW_creatorButton {
+  border: 1px solid var(--dsw-alias-border-l2);
+  border-radius: var(--dsh-md3-radius-full);
+  font-weight: var(--dsh-md3-type-label-large-weight);
+  letter-spacing: var(--dsh-md3-type-label-large-track);
+}
+
+/* ===================== Theme picker: selected = tonal container ========== *
+ * M3 selection rule: the chosen option sits in a tinted container with a
+ * themed outline (the stock rule hard-codes a static blue border). */
+html ._8HJdBW_selected,
+html ._8HJdBW_selected:hover {
+  background: var(--dsw-alias-state-business-tertiary);
+  border-color: var(--dsw-alias-state-business-primary);
+}
+
+/* ===================== Cost meter → M3 linear progress =================== *
+ * Fully rounded segments on the track, matching the M3 progress shape. */
+html .cm-peak-track {
+  border-radius: var(--dsh-md3-radius-full);
+  overflow: hidden;
+}
+html .cm-peak-segment,
+html .cm-peak-marker {
+  border-radius: var(--dsh-md3-radius-full);
+}
+
+/* ===================== Search field → M3 search bar shape ================ */
+html input.bhn1Oq_searchInput {
+  border-radius: var(--dsh-md3-radius-full);
+  background: var(--dsw-alias-bg-module-platform);
 }
