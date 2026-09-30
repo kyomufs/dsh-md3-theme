@@ -10,14 +10,15 @@ html [role="dialog"] {
   box-shadow: var(--dsw-shadow-lv3);
 }
 html .VOzbGW_overlay {
-  animation: md3-fade-in var(--dsh-md3-duration-standard-decel) both;
+  animation: md3-fade-in var(--dsh-md3-dur-effects) var(--dsh-md3-spring-effects) both;
 }
 html .VOzbGW_panel {
   border-radius: var(--dsh-md3-radius-xl);
   box-shadow: var(--dsw-shadow-lv3);
 }
 
-/* ===================== Menus and listboxes ===================== */
+/* ===================== Menus and listboxes ===================== *
+ * Optical roundness (M3): inner = outer − padding → items get4px (8 − 4). */
 html [role="menu"],
 html [role="listbox"] {
   border-radius: var(--dsh-md3-radius-s);
@@ -26,8 +27,8 @@ html [role="listbox"] {
 }
 html [role="menu"] [role="menuitem"],
 html [role="listbox"] [role="option"] {
-  border-radius: var(--dsh-md3-radius-s);
-  transition: background-color var(--dsh-md3-duration-short) var(--dsh-md3-easing-standard);
+  border-radius: var(--dsh-md3-radius-xs);
+  transition: background-color var(--dsh-md3-dur-effects) var(--dsh-md3-spring-effects);
 }
 html [role="menu"] [role="menuitem"]:hover,
 html [role="listbox"] [role="option"]:hover {
@@ -53,8 +54,8 @@ html [data-dockkit-add-tab],
 html .t1T8VW_copy,
 html .dsh_notification_buttonGhost {
   transition:
-    background-color var(--dsh-md3-duration-short) var(--dsh-md3-easing-standard),
-    transform var(--dsh-md3-duration-short) var(--dsh-md3-easing-standard);
+    background-color var(--dsh-md3-dur-effects) var(--dsh-md3-spring-effects),
+    transform var(--dsh-md3-dur-spatial-fast) var(--dsh-md3-spring-spatial-fast);
 }
 html .hHd-Xa_iconButton:hover:not(:disabled),
 html .hHd-Xa_newSession:hover:not(:disabled),
@@ -85,8 +86,8 @@ html .uV2eYG_primary,
 html .uV2eYG_add,
 html .dsh_notification_buttonPri {
   transition:
-    transform var(--dsh-md3-duration-short) var(--dsh-md3-easing-standard),
-    filter var(--dsh-md3-duration-short) var(--dsh-md3-easing-standard);
+    transform var(--dsh-md3-dur-spatial-fast) var(--dsh-md3-spring-spatial-fast),
+    filter var(--dsh-md3-dur-effects) var(--dsh-md3-spring-effects);
 }
 html .uV2eYG_primary:hover:not(:disabled),
 html .uV2eYG_add:hover:not(:disabled),
@@ -100,10 +101,14 @@ html .dsh_notification_buttonPri:active:not(:disabled) {
   filter: brightness(0.95);
 }
 
-/* ===================== Settings dialog internals ===================== */
-/* Nav drawer items become fully rounded MD3 rows. */
+/* ===================== Settings dialog internals ===================== *
+ * Nav drawer items become fully rounded MD3 rows; the active destination
+ * uses emphasized label type (M3 Expressive: selection = emphasized). */
 html .VOzbGW_navCell {
   border-radius: var(--dsh-md3-radius-full);
+}
+html .VOzbGW_navCell.VOzbGW_active {
+  font-weight: 600;
 }
 html .VOzbGW_navCell:not(.VOzbGW_active):hover {
   background: var(--dsw-alias-interactive-bg-hover);
@@ -125,7 +130,7 @@ html .T1PP_q_selector,
 html .pXSMma_workspace,
 html .cubgiG_seat {
   border-radius: var(--dsh-md3-radius-full);
-  transition: background-color var(--dsh-md3-duration-short) var(--dsh-md3-easing-standard);
+  transition: background-color var(--dsh-md3-dur-effects) var(--dsh-md3-spring-effects);
 }
 html .oY77xG_selector:hover:not(:disabled),
 html .hVGvvW_selector:hover:not(:disabled),
@@ -146,7 +151,7 @@ html .hHd-Xa_panelRow {
 html .YDXeBa_sessionRow,
 html .YDXeBa_searchResultRow,
 html .Y0dWHa_historyLoadRow {
-  transition: background-color var(--dsh-md3-duration-short) var(--dsh-md3-easing-standard);
+  transition: background-color var(--dsh-md3-dur-effects) var(--dsh-md3-spring-effects);
 }
 html .YDXeBa_sessionRow:hover,
 html .YDXeBa_searchResultRow:hover,
@@ -159,7 +164,7 @@ html .YDXeBa_sessionRow.YDXeBa_menuOpen {
 }
 html .Y0dWHa_historyLoadButton {
   border-radius: var(--dsh-md3-radius-full);
-  transition: background-color var(--dsh-md3-duration-short) var(--dsh-md3-easing-standard);
+  transition: background-color var(--dsh-md3-dur-effects) var(--dsh-md3-spring-effects);
 }
 html .Y0dWHa_historyLoadButton:hover:not(:disabled) {
   background: var(--dsw-alias-interactive-bg-hover);
@@ -173,7 +178,7 @@ html [data-composer-card]:focus-within {
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--dsw-alias-brand-primary) 55%, transparent);
 }
 html [data-composer-card] button:not(.uV2eYG_primary):not(.uV2eYG_add):not(:disabled) {
-  transition: background-color var(--dsh-md3-duration-short) var(--dsh-md3-easing-standard);
+  transition: background-color var(--dsh-md3-dur-effects) var(--dsh-md3-spring-effects);
 }
 html [data-composer-card] button:not(.uV2eYG_primary):not(.uV2eYG_add):hover:not(:disabled) {
   background: var(--dsw-alias-interactive-bg-hover);
@@ -197,9 +202,18 @@ html .Sixlwa_retryRow {
   border-radius: var(--dsh-md3-radius-s);
 }
 
-/* ===================== Chips and pills → full ===================== */
+/* ===================== Chips → 8dp (M3 chip spec) ======================== *
+ * M3 chips:32dp height,8dp corner, label-large type. Buttons/triggers below
+ * stay fully rounded pills (M3 button shape). */
 html .bOPqQW_pill,
-html .yAWgPa_chip,
+html .yAWgPa_chip {
+  border-radius: var(--dsh-md3-radius-s);
+  min-height: 32px;
+  font-size: var(--dsh-md3-type-label-large-size);
+  line-height: var(--dsh-md3-type-label-large-lh);
+  font-weight: var(--dsh-md3-type-label-large-weight);
+  letter-spacing: var(--dsh-md3-type-label-large-track);
+}
 html .JObwrW_trigger,
 html .JObwrW_bar,
 html .xzv4MW_action,
@@ -230,7 +244,7 @@ html ._8HJdBW_themeCube {
  * rows, html button variants. */
 html .dsh_notification_toggleRow {
   border-radius: var(--dsh-md3-radius-s);
-  transition: background-color var(--dsh-md3-duration-short) var(--dsh-md3-easing-standard);
+  transition: background-color var(--dsh-md3-dur-effects) var(--dsh-md3-spring-effects);
 }
 html .dsh_notification_toggleRow:hover {
   background: var(--dsw-alias-interactive-bg-hover);
@@ -240,33 +254,34 @@ html .dsh_notification_button {
   font-weight: 500;
   letter-spacing: 0.1px;
   transition:
-    background-color var(--dsh-md3-duration-short) var(--dsh-md3-easing-standard),
-    filter var(--dsh-md3-duration-short) var(--dsh-md3-easing-standard),
-    transform var(--dsh-md3-duration-short) var(--dsh-md3-easing-standard);
+    background-color var(--dsh-md3-dur-effects) var(--dsh-md3-spring-effects),
+    filter var(--dsh-md3-dur-effects) var(--dsh-md3-spring-effects),
+    transform var(--dsh-md3-dur-effects) var(--dsh-md3-spring-effects);
 }
 html .dsh_notification_badge {
   border-radius: var(--dsh-md3-radius-full);
 }
 
-/* M3 checkbox: 20px box, html 2px outline, html primary fill + white check. */
+/* M3 checkbox (spec):18dp container,2dp corner,2dp outline, primary fill +
+ * white icon; on-surface label colour is handled by the harness. */
 html input[type="checkbox"] {
   accent-color: var(--dsw-alias-state-business-primary);
 }
 html input[type="checkbox"].dsh_notification_checkbox {
   appearance: none;
   -webkit-appearance: none;
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   margin: 0;
   border: 2px solid var(--dsw-alias-label-secondary);
-  border-radius: var(--dsh-md3-radius-xs);
+  border-radius: 2px;
   background: transparent;
   display: inline-grid;
   place-content: center;
   cursor: pointer;
   transition:
-    background-color var(--dsh-md3-duration-short) var(--dsh-md3-easing-standard),
-    border-color var(--dsh-md3-duration-short) var(--dsh-md3-easing-standard);
+    background-color var(--dsh-md3-dur-effects) var(--dsh-md3-spring-effects),
+    border-color var(--dsh-md3-dur-effects) var(--dsh-md3-spring-effects);
 }
 html input[type="checkbox"].dsh_notification_checkbox:hover {
   border-color: var(--dsw-alias-state-business-primary);
@@ -275,7 +290,7 @@ html input[type="checkbox"].dsh_notification_checkbox:checked {
   background-color: var(--dsw-alias-state-business-primary);
   border-color: var(--dsw-alias-state-business-primary);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='none' stroke='%23fff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round' d='M5.5 10.5l3 3 6-6'/%3E%3C/svg%3E");
-  background-size: 16px 16px;
+  background-size: 14px 14px;
   background-position: center;
   background-repeat: no-repeat;
 }
@@ -287,8 +302,8 @@ html input[type="number"]:not([class*="dsh-md3-"]) {
   border: 1px solid var(--dsw-alias-border-l2);
   border-radius: var(--dsh-md3-radius-s);
   transition:
-    border-color var(--dsh-md3-duration-short) var(--dsh-md3-easing-standard),
-    box-shadow var(--dsh-md3-duration-short) var(--dsh-md3-easing-standard);
+    border-color var(--dsh-md3-dur-effects) var(--dsh-md3-spring-effects),
+    box-shadow var(--dsh-md3-dur-effects) var(--dsh-md3-spring-effects);
 }
 html input[type="text"]:not([class*="dsh-md3-"]):focus,
 html input[type="search"]:not([class*="dsh-md3-"]):focus,
@@ -304,8 +319,125 @@ html .ZKlsPq_switcherTrigger {
   border-radius: var(--dsh-md3-radius-full) !important;
 }
 html .ZKlsPq_switcherTrigger {
-  transition: background-color var(--dsh-md3-duration-short) var(--dsh-md3-easing-standard);
+  transition: background-color var(--dsh-md3-dur-effects) var(--dsh-md3-spring-effects);
 }
 html .ZKlsPq_switcherTrigger:hover {
   background: var(--dsw-alias-interactive-bg-hover);
+}
+
+/* ===================== M3 radio button (spec: 20dp, primary dot) ========= */
+html input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  border: 2px solid var(--dsw-alias-label-secondary);
+  border-radius: 50%;
+  background: transparent;
+  display: inline-grid;
+  place-content: center;
+  cursor: pointer;
+  transition:
+    background-color var(--dsh-md3-dur-effects) var(--dsh-md3-spring-effects),
+    border-color var(--dsh-md3-dur-effects) var(--dsh-md3-spring-effects);
+}
+html input[type="radio"]:hover {
+  border-color: var(--dsw-alias-state-business-primary);
+}
+html input[type="radio"]:checked {
+  border-color: var(--dsw-alias-state-business-primary);
+  background: radial-gradient(
+    circle at center,
+    var(--dsw-alias-state-business-primary) 0 5px,
+    transparent 5.5px
+  );
+}
+
+/* ===================== M3 slider (visual-refresh shape) ================== *
+ * Spec: active primary track, secondary/outline inactive track, handle as a
+ *4dp vertical pill (widens toward a line on press);48dp interaction height. */
+html input[type="range"] {
+  appearance: none;
+  -webkit-appearance: none;
+  height: 32px;
+  background: transparent;
+  cursor: pointer;
+}
+html input[type="range"]::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: var(--dsh-md3-radius-full);
+  background: var(--dsw-alias-border-l2);
+}
+html input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 4px;
+  height: 20px;
+  margin-top: -8px;
+  border: none;
+  border-radius: var(--dsh-md3-radius-full);
+  background: var(--dsw-alias-state-business-primary);
+  transition: height var(--dsh-md3-dur-spatial-fast) var(--dsh-md3-spring-spatial-fast);
+}
+html input[type="range"]:active::-webkit-slider-thumb {
+  height: 28px;
+  margin-top: -12px;
+}
+html input[type="range"]:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--dsw-alias-state-business-primary) 32%, transparent);
+}
+html input[type="range"]::-moz-range-track {
+  height: 4px;
+  border-radius: var(--dsh-md3-radius-full);
+  background: var(--dsw-alias-border-l2);
+}
+html input[type="range"]::-moz-range-thumb {
+  width: 4px;
+  height: 20px;
+  border: none;
+  border-radius: var(--dsh-md3-radius-full);
+  background: var(--dsw-alias-state-business-primary);
+}
+
+/* ===================== Progress & loading indicators ==================== *
+ * M3: primary rails on outline-variant tracks, fully rounded ends. */
+html .gSkjMW_progressTrack,
+html .dWHa_historyLoadingBar {
+  border-radius: var(--dsh-md3-radius-full);
+}
+html .gSkjMW_progress,
+html .gSkjMW_progressBar,
+html .Mbwy4a_progress,
+html .lXshSW_progress,
+html .lXshSW_glyphProgress {
+  border-radius: var(--dsh-md3-radius-full);
+  background-color: var(--dsw-alias-state-business-primary);
+}
+html .gSkjMW_spinner {
+  border-top-color: var(--dsw-alias-state-business-primary);
+}
+
+/* ===================== Dividers → outline-variant ======================== */
+html hr {
+  border: none;
+  height: 1px;
+  background: var(--dsw-alias-border-l2);
+}
+html [role="separator"] {
+  background-color: var(--dsw-alias-border-l2);
+}
+
+/* ===================== Emphasized type (Expressive) ====================== *
+ * Emphasized marks exceptions: primary actions and badges (M3 guidance:
+ * badges, primary buttons, selected rows use the emphasized label styles). */
+html .uV2eYG_primary,
+html .uV2eYG_add,
+html .dsh_notification_buttonPri {
+  font-weight: var(--dsh-md3-type-label-large-emph-weight);
+  letter-spacing: var(--dsh-md3-type-label-large-track);
+}
+html .dsh_notification_badge {
+  font-weight: var(--dsh-md3-type-label-medium-emph-weight);
+  letter-spacing: var(--dsh-md3-type-label-medium-track);
 }

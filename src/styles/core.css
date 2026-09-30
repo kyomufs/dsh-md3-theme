@@ -22,13 +22,60 @@
   --dsh-md3-easing-standard-decel: cubic-bezier(0, 0, 0, 1);
   --dsh-md3-easing-standard-accel: cubic-bezier(0.3, 0, 1, 1);
 
-  /* MD3 shape scale: extra-small / small / medium / large / extra-large. */
+  /* M3 Expressive spring approximations (web fallback: cubic-bezier + duration).
+   * Spatial springs carry movement (y1 > 1 = bounce); effects springs carry
+   * color/opacity and never overshoot (damping 1.0). Source: ExpressiveMotionTokens. */
+  --dsh-md3-spring-spatial-fast: cubic-bezier(0.42, 1.67, 0.21, 0.9);
+  --dsh-md3-spring-spatial: cubic-bezier(0.38, 1.21, 0.22, 1);
+  --dsh-md3-spring-spatial-slow: cubic-bezier(0.39, 1.29, 0.35, 0.98);
+  --dsh-md3-spring-effects-fast: cubic-bezier(0.31, 0.94, 0.34, 1);
+  --dsh-md3-spring-effects: cubic-bezier(0.34, 0.8, 0.34, 1);
+  --dsh-md3-dur-spatial-fast: 350ms;
+  --dsh-md3-dur-spatial: 500ms;
+  --dsh-md3-dur-spatial-slow: 650ms;
+  --dsh-md3-dur-effects-fast: 150ms;
+  --dsh-md3-dur-effects: 200ms;
+
+  /* MD3 shape scale: 10 steps (Expressive added l20 / xl2 / xxl). */
   --dsh-md3-radius-xs: 4px;  /* chips, snackbars */
   --dsh-md3-radius-s: 8px;   /* text fields, menus */
   --dsh-md3-radius-m: 12px;  /* cards */
   --dsh-md3-radius-l: 16px;  /* FAB, nav drawer */
+  --dsh-md3-radius-l20: 20px;   /* large increased (Expressive) */
   --dsh-md3-radius-xl: 28px; /* dialogs, bottom sheets */
+  --dsh-md3-radius-xl2: 32px;   /* extra large increased (Expressive) */
+  --dsh-md3-radius-xxl: 48px;   /* extra extra large (Expressive) */
   --dsh-md3-radius-full: 9999px; /* buttons, pills, badges */
+
+  /* MD3 typescale tokens (size/line-height/tracking/weight, web px units).
+   * Baseline set; emphasized set swaps weight (and tracking where noted). */
+  --dsh-md3-type-label-large-size: 14px;
+  --dsh-md3-type-label-large-lh: 20px;
+  --dsh-md3-type-label-large-track: 0.1px;
+  --dsh-md3-type-label-large-weight: 500;
+  --dsh-md3-type-label-large-emph-weight: 700;
+  --dsh-md3-type-label-medium-size: 12px;
+  --dsh-md3-type-label-medium-lh: 16px;
+  --dsh-md3-type-label-medium-track: 0.5px;
+  --dsh-md3-type-label-medium-weight: 500;
+  --dsh-md3-type-label-medium-emph-weight: 700;
+  --dsh-md3-type-title-medium-size: 16px;
+  --dsh-md3-type-title-medium-lh: 24px;
+  --dsh-md3-type-title-medium-track: 0.2px;
+  --dsh-md3-type-title-medium-weight: 500;
+  --dsh-md3-type-title-medium-emph-weight: 700;
+  --dsh-md3-type-title-large-size: 22px;
+  --dsh-md3-type-title-large-lh: 28px;
+  --dsh-md3-type-title-large-weight: 400;
+  --dsh-md3-type-title-large-emph-weight: 500;
+  --dsh-md3-type-headline-small-size: 24px;
+  --dsh-md3-type-headline-small-lh: 32px;
+  --dsh-md3-type-headline-small-weight: 400;
+  --dsh-md3-type-headline-small-emph-weight: 500;
+  --dsh-md3-type-body-medium-size: 14px;
+  --dsh-md3-type-body-medium-lh: 20px;
+  --dsh-md3-type-body-medium-track: 0.2px;
+  --dsh-md3-type-body-medium-emph-weight: 500;
 }
 
 /* --- Focus: MD3 2px primary indicator on every keyboard focus ------------ */
@@ -37,7 +84,8 @@ html :focus-visible {
   outline-offset: 2px;
 }
 
-/* --- State motion: interactive elements fade color layers the MD3 way ---- */
+/* --- State motion: color/opacity layers use effects springs (no overshoot).
+ * Transform feedback uses the fast spatial spring (bounce is the point). ---- */
 /* Covers bare elements; component classes with their own transitions keep
  * theirs (higher specificity wins) — this is the fallback baseline. */
 button,
@@ -50,21 +98,21 @@ a,
 [role="checkbox"],
 [role="radio"] {
   transition:
-    background-color var(--dsh-md3-duration-short) var(--dsh-md3-easing-standard),
-    border-color var(--dsh-md3-duration-short) var(--dsh-md3-easing-standard),
-    color var(--dsh-md3-duration-short) var(--dsh-md3-easing-standard),
-    box-shadow var(--dsh-md3-duration-short) var(--dsh-md3-easing-standard),
-    opacity var(--dsh-md3-duration-short) var(--dsh-md3-easing-standard),
-    transform var(--dsh-md3-duration-short) var(--dsh-md3-easing-standard);
+    background-color var(--dsh-md3-dur-effects) var(--dsh-md3-spring-effects),
+    border-color var(--dsh-md3-dur-effects) var(--dsh-md3-spring-effects),
+    color var(--dsh-md3-dur-effects) var(--dsh-md3-spring-effects),
+    box-shadow var(--dsh-md3-dur-effects) var(--dsh-md3-spring-effects),
+    opacity var(--dsh-md3-dur-effects) var(--dsh-md3-spring-effects),
+    transform var(--dsh-md3-dur-spatial-fast) var(--dsh-md3-spring-spatial-fast);
 }
 
-/* --- Press: MD3 emphasised touch feedback (scale, 100ms) ----------------- */
+/* --- Press: MD3 emphasised touch feedback (scale, fast spatial spring) ---- */
 button:active:not(:disabled),
 [role="button"]:active,
 [role="switch"]:active,
 [role="tab"]:active {
   transform: scale(0.97);
-  transition-duration: 100ms;
+  transition: transform var(--dsh-md3-dur-effects-fast) var(--dsh-md3-spring-spatial-fast);
 }
 
 /* --- Scrollbars: thin MD3 rails with pill thumbs ------------------------- */

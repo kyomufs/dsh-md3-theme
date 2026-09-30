@@ -1,6 +1,6 @@
 # dsh-md3-theme
 
-Full Material Design 3 (Material You) theme for [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) — HCT-generated light/dark palettes with seven accent presets **plus a component restyle**: the MD3 shape scale, elevation shadows, motion (enter animations, state transitions, press feedback), focus indicators, scrollbars and press ripple.
+Full Material Design 3 (Material You) theme for [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) — HCT-generated light/dark palettes with seven accent presets **plus a full component restyle aligned with M3 Expressive**: the 10-step shape scale, tonal elevation, spring-based motion, emphasized typography, state layers, spec-accurate controls (switch/checkbox/radio/slider/chips), progress rails, focus indicators, scrollbars and press ripple.
 
 The plugin derives every color with Google's [`@material/material-color-utilities`](https://github.com/material-foundation/material-color-utilities) (HCT color space) from a seed color, maps the resulting Material 3 color roles onto the harness `--dsw-*` semantic tokens, and layers them over the active theme via `ctx.theme.overrideTokens`. On top of that, three CSS layers (core → components → motion) mount as `style[data-plugin-css]` tags while the theme is on. The built-in light/dark/system preference keeps working exactly as before.
 
@@ -8,12 +8,17 @@ The plugin derives every color with Google's [`@material/material-color-utilitie
 
 - **Full MD3 palette, both modes** — surfaces, tonal containers, text ladder, outlines, primary/secondary/error roles for light *and* dark in every preset (44 tokens per scheme).
 - **MD3 elevation** — the harness shadow tokens are re-mapped to the Material 3 ambient + key pairs (level 1–3).
-- **MD3 shape scale** — dialogs 28px, cards 12px, bubbles 16px, menus 8px, buttons/chips/nav rows fully rounded, all driven by `--dsh-md3-radius-*` tokens.
+- **MD3 shape scale (10 steps)** — dialogs 28px, cards 12px, bubbles 16px, menus 8px, plus the Expressive `20/32/48px` steps as tokens; buttons/nav rows fully rounded; optical nesting (`inner = outer − padding`) inside menus (8px surface − 4px padding = 4px items).
 - **Interactive state layers** — every ghost/icon/text button, menu item, session row, settings row and composer control gets the M3 hover (8% on-surface) and pressed (12%) tonal layers via the theme-aware `interactive-bg-hover/active` tokens; filled buttons brighten on hover and compress on press.
-- **M3 checkbox & switch** — notification checkboxes become 20px/4px outlined boxes that fill primary with a white check when on; the settings switch uses the real M3 geometry (52×32 track, 16px thumb, tonal off / primary on).
-- **Lists & menus** — session rows, search results and history rows hover-tonal with a tinted secondary-container selection; menus are 8px surfaces with 4px padding, lv2 elevation and tonal item states; dropdown triggers and filter chips are fully rounded pills with a tinted selected state.
+- **M3 switch (real spec)** — 52×32 track with a 2px outline when off; handle grows 16dp → **24dp selected** → 28dp pressed; tonal off / primary on.
+- **M3 checkbox & radio** — checkboxes are 18dp boxes with 2px corners that fill primary with a white check when on; radios are 20dp circles with a primary dot; both get hover feedback.
+- **M3 slider** — `input[type=range]` gets the visual-refresh shape: 4px rounded track, 4×20 primary handle that stretches on press, primary focus halo.
+- **Chips at 8dp** — filter/assist chips follow the M3 chip spec (32dp height, 8dp corner, label-large type); selected chips render emphasized; buttons and triggers stay full pills.
+- **Lists & menus** — session rows, search results and history rows hover-tonal with a tinted secondary-container selection; menus are 8px surfaces with lv2 elevation and tonal item states.
+- **Progress & dividers** — progress rails/bars/spinners render fully rounded in primary; `hr`/separators use outline-variant.
 - **M3 outlined inputs** — text/search/number fields get an outline-variant border that turns primary with a 2px focus ring.
-- **Motion** — dialogs scale-fade in with emphasised decelerate (400ms), menus fade in, interactive elements get standard state transitions, press scales controls down, hover raises cards a level. All durations/easings are MD3 tokens; `prefers-reduced-motion` disables animation entirely.
+- **M3 Expressive motion** — enter animations and state transitions use the sanctioned web spring fallbacks from the Expressive motion table: spatial springs (overshoot) for movement, effects springs (never overshoot) for color/opacity; press scales controls down, hover raises cards a level. `prefers-reduced-motion` disables animation entirely.
+- **Emphasized typescale** — baseline and emphasized label/title/headline/body styles ship as CSS tokens; selection and actions opt in (active nav item, selected preset chip, primary buttons, badges).
 - **Press ripple** — one delegated `pointerdown` listener injects a per-press ripple into any `<button>` (skipped for reduced-motion users, skipped while the theme is off).
 - **Focus & scrollbars** — 2px primary focus rings, thin rounded scrollbars, accent-tinted text selection.
 - **Seven accent presets** — DeepSeek Blue, Material Purple, Teal, Green, Rose, Orange, Graphite. Switch live from Settings; no reload.
