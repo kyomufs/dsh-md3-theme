@@ -18,16 +18,20 @@ html .VOzbGW_panel {
 }
 
 /* ===================== Menus and listboxes ===================== *
- * Optical roundness (M3): inner = outer − padding → items get4px (8 − 4). */
+ * Baseline menu spec: container 4dp corners, list items 48dp tall with
+ * 12dp leading/trailing padding, 24dp icons, 1dp dividers padded 8dp.
+ * Optical nesting: container keeps 4px padding → items are square. */
 html [role="menu"],
 html [role="listbox"] {
-  border-radius: var(--dsh-md3-radius-s);
+  border-radius: var(--dsh-md3-radius-xs);
   box-shadow: var(--dsw-shadow-lv2);
   padding: 4px;
 }
 html [role="menu"] [role="menuitem"],
 html [role="listbox"] [role="option"] {
-  border-radius: var(--dsh-md3-radius-xs);
+  border-radius: 0;
+  min-height: 48px;
+  padding: 0 12px;
   transition: background-color var(--dsh-md3-dur-effects) var(--dsh-md3-spring-effects);
 }
 html [role="menu"] [role="menuitem"]:hover,
@@ -36,6 +40,15 @@ html [role="listbox"] [role="option"]:hover {
 }
 html [role="menu"] [role="menuitem"]:active,
 html [role="listbox"] [role="option"]:active {
+  background: color-mix(in srgb, var(--dsw-alias-label-primary) 10%, transparent);
+}
+html [role="menu"] [role="separator"],
+html [role="listbox"] [role="separator"] {
+  margin: 8px 0;
+  border-color: var(--dsw-alias-border-l2);
+}
+/* Spec: while a menu is open its trigger reads as pressed. */
+html [aria-haspopup][aria-expanded="true"]:not(:disabled) {
   background: color-mix(in srgb, var(--dsw-alias-label-primary) 10%, transparent);
 }
 
@@ -56,7 +69,11 @@ html .dsh_notification_buttonGhost,
 html ._8HJdBW_themeCube,
 html .zGbnIq_addButton,
 html .zGbnIq_modelEmpty,
-html .rtSEdW_creatorButton {
+html .rtSEdW_creatorButton,
+html .nL4_yW_moreButton,
+html .CAgGvG_chevron,
+html .VOzbGW_trigger,
+html .ZKlsPq_trigger {
   transition:
     background-color var(--dsh-md3-dur-effects) var(--dsh-md3-spring-effects),
     border-radius var(--dsh-md3-dur-spatial-fast) var(--dsh-md3-spring-spatial-fast),
@@ -76,7 +93,11 @@ html .dsh_notification_buttonGhost:hover:not(:disabled),
 html ._8HJdBW_themeCube:hover:not(:disabled),
 html .zGbnIq_addButton:hover:not(:disabled),
 html .zGbnIq_modelEmpty:hover:not(:disabled),
-html .rtSEdW_creatorButton:hover:not(:disabled) {
+html .rtSEdW_creatorButton:hover:not(:disabled),
+html .nL4_yW_moreButton:hover:not(:disabled),
+html .CAgGvG_chevron:hover:not(:disabled),
+html .VOzbGW_trigger:hover:not(:disabled),
+html .ZKlsPq_trigger:hover:not(:disabled) {
   background: var(--dsw-alias-interactive-bg-hover);
 }
 html .hHd-Xa_iconButton:active:not(:disabled),
@@ -90,7 +111,11 @@ html .dsh_notification_buttonGhost:active:not(:disabled),
 html ._8HJdBW_themeCube:active:not(:disabled),
 html .zGbnIq_addButton:active:not(:disabled),
 html .zGbnIq_modelEmpty:active:not(:disabled),
-html .rtSEdW_creatorButton:active:not(:disabled) {
+html .rtSEdW_creatorButton:active:not(:disabled),
+html .nL4_yW_moreButton:active:not(:disabled),
+html .CAgGvG_chevron:active:not(:disabled),
+html .VOzbGW_trigger:active:not(:disabled),
+html .ZKlsPq_trigger:active:not(:disabled) {
   background: color-mix(in srgb, var(--dsw-alias-label-primary) 10%, transparent);
 }
 
@@ -113,6 +138,31 @@ html .uV2eYG_add:active:not(:disabled),
 html .dsh_notification_buttonPri:active:not(:disabled) {
   transform: scale(0.97);
   filter: brightness(0.95);
+}
+
+/* ===================== FAB: composer send button ======================== *
+ * Spec (small FAB): 40×40 container, CornerMedium (12dp) shape, 24dp icon,
+ * soft elevation that rises one level on hover, spatial-spring morph on
+ * press (the shared pressed-morph block drops it to CornerSmall). */
+html .uV2eYG_primary {
+  width: 40px;
+  height: 40px;
+  transform: none;
+  border-radius: var(--dsh-md3-radius-m);
+  box-shadow: var(--dsw-elevation-soft);
+  transition:
+    transform var(--dsh-md3-dur-spatial-fast) var(--dsh-md3-spring-spatial-fast),
+    border-radius var(--dsh-md3-dur-spatial-fast) var(--dsh-md3-spring-spatial-fast),
+    box-shadow var(--dsh-md3-dur-effects) var(--dsh-md3-spring-effects),
+    filter var(--dsh-md3-dur-effects) var(--dsh-md3-spring-effects),
+    background-color var(--dsh-md3-dur-effects) var(--dsh-md3-spring-effects);
+}
+html .uV2eYG_primary:hover:not(:disabled) {
+  box-shadow: var(--dsw-elevation-prominent);
+}
+html .uV2eYG_primary svg {
+  width: 24px;
+  height: 24px;
 }
 
 /* ===================== Shape morph: pressed buttons (Expressive) ========== *
@@ -245,20 +295,171 @@ html ._7KE1Ra_triggerEffort + svg {
   padding: 3px 5px 3px 1px;
   box-sizing: content-box;
 }
+/* Trailing region carries its own state layer (spec split button). */
+html ._7KE1Ra_trigger:hover ._7KE1Ra_triggerEffort,
+html ._7KE1Ra_trigger:hover ._7KE1Ra_triggerEffort + svg {
+  filter: brightness(1.15);
+}
+html ._7KE1Ra_trigger:active ._7KE1Ra_triggerEffort,
+html ._7KE1Ra_trigger:active ._7KE1Ra_triggerEffort + svg {
+  filter: brightness(0.92);
+}
 
-/* ===================== Session list (navigation drawer) =================== */
+/* ===================== Navigation rail (collapsed sidebar) =============== *
+ * Spec (NavigationRail collapsed/narrow): 80dp container, elevation 0,
+ *44dp top space,4dp vertical space between items; icon-only items render
+ * a56×32 fully-round active indicator; the primary action sits on top as
+ * a small FAB (40×40, CornerMedium) with soft elevation. The harness ships
+ * a56px column — widened to the spec's narrow width here. */
+html .pI_x6G_frame[data-sidebar-collapsed="true"] {
+  grid-template-columns: 80px minmax(0px, 1fr) 0px !important;
+}
+html .hHd-Xa_root.hHd-Xa_collapsed {
+  align-items: center;
+  padding-top: 24px;
+}
+html .hHd-Xa_collapsed .hHd-Xa_logoRow,
+html .hHd-Xa_collapsed .hHd-Xa_panelList,
+html .hHd-Xa_collapsed .hHd-Xa_settingsArea {
+  justify-content: center;
+  width: auto;
+}
+html .hHd-Xa_collapsed .hHd-Xa_panelList {
+  gap: 4px;
+}
+/* Rail items: spec vertical-item indicator (56×32, CornerFull). */
+html .hHd-Xa_collapsed .hHd-Xa_iconButton,
+html .hHd-Xa_collapsed .hHd-Xa_panelRow,
+html .hHd-Xa_collapsed .hHd-Xa_settingsArea > * {
+  box-sizing: border-box;
+  width: 56px;
+  height: 32px;
+  flex: none;
+  border: 0;
+  border-radius: var(--dsh-md3-radius-full);
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  gap: 0;
+}
+html .hHd-Xa_collapsed .hHd-Xa_panelRow.hHd-Xa_panelActive {
+  background: var(--dsw-alias-state-business-tertiary);
+}
+/* Primary action → small FAB (spec geometry), contained style. */
+html .hHd-Xa_collapsed .hHd-Xa_newSession {
+  box-sizing: border-box;
+  width: 40px;
+  height: 40px;
+  align-self: center;
+  margin: 0 auto 8px;
+  padding: 0;
+  gap: 0;
+  border: 0;
+  border-radius: var(--dsh-md3-radius-m);
+  background: var(--dsw-alias-button-info-fill);
+  color: #fff;
+  box-shadow: var(--dsw-elevation-soft);
+  justify-content: center;
+  align-items: center;
+  transition:
+    transform var(--dsh-md3-dur-spatial-fast) var(--dsh-md3-spring-spatial-fast),
+    border-radius var(--dsh-md3-dur-spatial-fast) var(--dsh-md3-spring-spatial-fast),
+    box-shadow var(--dsh-md3-dur-effects) var(--dsh-md3-spring-effects),
+    background-color var(--dsh-md3-dur-effects) var(--dsh-md3-spring-effects),
+    filter var(--dsh-md3-dur-effects) var(--dsh-md3-spring-effects);
+}
+html .hHd-Xa_collapsed .hHd-Xa_newSession:hover:not(:disabled) {
+  filter: brightness(1.08);
+  box-shadow: var(--dsw-elevation-prominent);
+}
+html .hHd-Xa_collapsed .hHd-Xa_newSession:active:not(:disabled) {
+  transform: scale(0.97);
+}
+html .hHd-Xa_collapsed .hHd-Xa_newSession svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* ===================== Navigation bar (session tabs) ===================== *
+ * Spec (NavigationBar): container spans the width with a separating surface
+ * fill and CornerNone shape; every destination sits in an equal-height box
+ * with a fully-round active indicator in secondary container; label-medium
+ * type. The harness underline indicator (3dp) is replaced by the pill. */
+html .wSkVaW_tabs {
+  box-sizing: border-box;
+  align-items: center;
+  gap: 0;
+  height: 48px;
+  padding: 4px 8px;
+  margin-top: 8px;
+  background: var(--dsw-alias-bg-module-platform);
+  border-radius: 0;
+}
+html .wSkVaW_tab {
+  position: relative;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  height: 40px;
+  padding: 0 16px;
+  border-radius: var(--dsh-md3-radius-full);
+  color: var(--dsw-alias-label-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  transition:
+    background-color var(--dsh-md3-dur-effects) var(--dsh-md3-spring-effects),
+    color var(--dsh-md3-dur-effects) var(--dsh-md3-spring-effects);
+}
+html .wSkVaW_tab:hover {
+  background: var(--dsw-alias-interactive-bg-hover);
+}
+html .wSkVaW_tab:active {
+  background: color-mix(in srgb, var(--dsw-alias-label-primary) 10%, transparent);
+}
+html .wSkVaW_tabActive,
+html .wSkVaW_tabActive:hover,
+html .wSkVaW_tabActive:active {
+  background: var(--dsh-alias-state-business-tertiary);
+}
+/* Kill the baseline underline indicator — the pill replaces it. */
+html .wSkVaW_tab:after {
+  background: transparent;
+}
+
+/* ===================== Session list (navigation drawer) =================== *
+ * Spec (drawer/rail horizontal items): rows read as fully-rounded list items
+ * — the selected row is the full active indicator in secondary container,
+ * height density-adapted to 40dp (spec drawer item is 56dp; the harness
+ * sidebar keeps its compact density). Pressed rows morph to CornerSmall. */
 html .YDXeBa_sessionRow,
+html .YDXeBa_flatSessionRowWithoutStatus,
+html .YDXeBa_projectRow,
 html .YDXeBa_searchResultRow,
 html .Y0dWHa_historyLoadRow {
-  transition: background-color var(--dsh-md3-dur-effects) var(--dsh-md3-spring-effects);
+  border-radius: var(--dsh-md3-radius-full);
+  min-height: 40px;
+  transition:
+    background-color var(--dsh-md3-dur-effects) var(--dsh-md3-spring-effects),
+    border-radius var(--dsh-md3-dur-spatial-fast) var(--dsh-md3-spring-spatial-fast);
 }
 html .YDXeBa_sessionRow:hover,
+html .YDXeBa_flatSessionRowWithoutStatus:hover,
+html .YDXeBa_projectRow:hover,
 html .YDXeBa_searchResultRow:hover,
 html .Y0dWHa_historyLoadRow:hover {
   background: var(--dsw-alias-interactive-bg-hover);
 }
+html .YDXeBa_sessionRow:active,
+html .YDXeBa_flatSessionRowWithoutStatus:active,
+html .YDXeBa_projectRow:active {
+  background: color-mix(in srgb, var(--dsw-alias-label-primary) 10%, transparent);
+  border-radius: var(--dsh-md3-radius-s);
+}
 html .YDXeBa_sessionRow.YDXeBa_selected,
-html .YDXeBa_sessionRow.YDXeBa_menuOpen {
+html .YDXeBa_sessionRow.YDXeBa_menuOpen,
+html .YDXeBa_sessionRow[aria-selected="true"],
+html .YDXeBa_projectRow.YDXeBa_folderActive,
+html .YDXeBa_projectRow[aria-selected="true"] {
   background: var(--dsw-alias-state-business-tertiary);
 }
 html .Y0dWHa_historyLoadButton {
