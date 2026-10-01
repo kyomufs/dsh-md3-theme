@@ -504,11 +504,30 @@ html .Sixlwa_retryRow {
   border-radius: var(--dsh-md3-radius-s);
 }
 
+/* ===================== Top app bar (session header) ===================== *
+ * Spec (small top app bar): a single40-48dp row in surface container with a
+ * hairline separation from content, title cluster leading, actions and
+ * utilities trailing. Density:48dp fits the harness breadcrumbs. */
+html .wSkVaW_titleRow {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  height: 48px;
+  min-height: 48px;
+  padding: 0 8px;
+  gap: 4px;
+  background: var(--dsw-alias-bg-module-platform);
+  border-radius: 0;
+  box-shadow: inset 0 -1px 0 var(--dsw-alias-border-l2);
+}
+
 /* ===================== Chips → 8dp (M3 chip spec) ======================== *
  * M3 chips:32dp height,8dp corner, label-large type. Buttons/triggers below
  * stay fully rounded pills (M3 button shape). */
 html .bOPqQW_pill,
-html .yAWgPa_chip {
+html .yAWgPa_chip,
+html .ZKlsPq_trigger,
+html .QsffPG_trigger {
   border-radius: var(--dsh-md3-radius-s);
   min-height: 32px;
   font-size: var(--dsh-md3-type-label-large-size);
