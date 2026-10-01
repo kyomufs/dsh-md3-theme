@@ -36,6 +36,11 @@
   --dsh-md3-dur-effects-fast: 150ms;
   --dsh-md3-dur-effects: 200ms;
 
+  /* M3 state-layer opacities (spec): hover 8%, pressed 10% of on-surface.
+   * Note: the harness --dsw-alias-* tokens are not defined on :root, so the
+   * colour mix itself is inlined at each usage site (color-mix resolves only
+   * where the alias token exists). */
+
   /* MD3 shape scale: 10 steps (Expressive added l20 / xl2 / xxl). */
   --dsh-md3-radius-xs: 4px;  /* chips, snackbars */
   --dsh-md3-radius-s: 8px;   /* text fields, menus */
@@ -100,6 +105,7 @@ a,
   transition:
     background-color var(--dsh-md3-dur-effects) var(--dsh-md3-spring-effects),
     border-color var(--dsh-md3-dur-effects) var(--dsh-md3-spring-effects),
+    border-radius var(--dsh-md3-dur-spatial-fast) var(--dsh-md3-spring-spatial-fast),
     color var(--dsh-md3-dur-effects) var(--dsh-md3-spring-effects),
     box-shadow var(--dsh-md3-dur-effects) var(--dsh-md3-spring-effects),
     opacity var(--dsh-md3-dur-effects) var(--dsh-md3-spring-effects),

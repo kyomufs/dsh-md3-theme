@@ -1,6 +1,6 @@
 # dsh-md3-theme
 
-Full Material Design 3 (Material You) theme for [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) — HCT-generated light/dark palettes with seven accent presets **plus a full component restyle aligned with M3 Expressive**: the 10-step shape scale, tonal elevation, spring-based motion, emphasized typography, state layers, spec-accurate controls (switch/checkbox/radio/slider/chips), progress rails, focus indicators, scrollbars and press ripple.
+Full Material Design 3 (Material You) theme for [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) — HCT-generated light/dark palettes with seven accent presets **plus a full component restyle aligned with M3 Expressive**: the 10-step shape scale, pressed-state shape morphing, split & connected button groups, tonal elevation, spring-based motion, emphasized typography, state layers, spec-accurate controls (switch/checkbox/radio/slider/chips), spec progress indicators, focus indicators, scrollbars and press ripple.
 
 The plugin derives every color with Google's [`@material/material-color-utilities`](https://github.com/material-foundation/material-color-utilities) (HCT color space) from a seed color, maps the resulting Material 3 color roles onto the harness `--dsw-*` semantic tokens, and layers them over the active theme via `ctx.theme.overrideTokens`. On top of that, three CSS layers (core → components → motion) mount as `style[data-plugin-css]` tags while the theme is on. The built-in light/dark/system preference keeps working exactly as before.
 
@@ -9,13 +9,16 @@ The plugin derives every color with Google's [`@material/material-color-utilitie
 - **Full MD3 palette, both modes** — surfaces, tonal containers, text ladder, outlines, primary/secondary/error roles for light *and* dark in every preset (44 tokens per scheme).
 - **MD3 elevation** — the harness shadow tokens are re-mapped to the Material 3 ambient + key pairs (level 1–3).
 - **MD3 shape scale (10 steps)** — dialogs 28px, cards 12px, bubbles 16px, menus 8px, plus the Expressive `20/32/48px` steps as tokens; buttons/nav rows fully rounded; optical nesting (`inner = outer − padding`) inside menus (8px surface − 4px padding = 4px items).
-- **Interactive state layers** — every ghost/icon/text button, menu item, session row, settings row and composer control gets the M3 hover (8% on-surface) and pressed (12%) tonal layers via the theme-aware `interactive-bg-hover/active` tokens; filled buttons brighten on hover and compress on press.
+- **Interactive state layers** — every ghost/icon/text button, menu item, session row, settings row and composer control gets the spec state layers: hover = 8% on-surface, pressed = 10% (the harness's own `active` token is 14% — the theme replaces it with the M3 value); filled buttons brighten on hover and compress on press.
+- **Shape morph (M3 Expressive)** — every pill button morphs its corners while pressed: `CornerFull → CornerSmall (8dp)` per the spec `PressedContainerShape`, carried by the fast spatial spring (`350ms`, overshooting cubic-bezier) and released with a bounce.
+- **Split button** — the model/effort trigger renders the spec split anatomy: outlined fully-round container, leading content region, trailing menu segment (tertiary-container fill, primary icon, 4dp inner corners, 2dp between regions) — clicks keep their original menu behaviour.
+- **Connected button group** — the dock chrome's icon pair becomes a spec connected group: 2dp padding/gap inside one fully-round outline-variant capsule with 8dp inner corners; other clusters (composer toolbar, row actions) match the standard-group spacing (12dp).
 - **M3 switch (real spec)** — 52×32 track with a 2px outline when off; handle grows 16dp → **24dp selected** → 28dp pressed; tonal off / primary on.
 - **M3 checkbox & radio** — checkboxes are 18dp boxes with 2px corners that fill primary with a white check when on; radios are 20dp circles with a primary dot; both get hover feedback.
 - **M3 slider** — `input[type=range]` gets the visual-refresh shape: 4px rounded track, 4×20 primary handle that stretches on press, primary focus halo.
 - **Chips at 8dp** — filter/assist chips follow the M3 chip spec (32dp height, 8dp corner, label-large type); selected chips render emphasized; buttons and triggers stay full pills.
 - **Lists & menus** — session rows, search results and history rows hover-tonal with a tinted secondary-container selection; menus are 8px surfaces with lv2 elevation and tonal item states.
-- **Progress & dividers** — progress rails/bars/spinners render fully rounded in primary; `hr`/separators use outline-variant.
+- **Progress & dividers** — linear progress follows the spec: 4dp fully-rounded track in secondary container under a primary active bar (the harness keeps its indeterminate wave); the circular loading spinner renders at 24dp with 4dp thickness, primary arc over a secondary-container ring; `hr`/separators use outline-variant.
 - **M3 outlined inputs** — text/search/number fields get an outline-variant border that turns primary with a 2px focus ring.
 - **M3 Expressive motion** — enter animations and state transitions use the sanctioned web spring fallbacks from the Expressive motion table: spatial springs (overshoot) for movement, effects springs (never overshoot) for color/opacity; press scales controls down, hover raises cards a level. `prefers-reduced-motion` disables animation entirely.
 - **Emphasized typescale** — baseline and emphasized label/title/headline/body styles ship as CSS tokens; selection and actions opt in (active nav item, selected preset chip, primary buttons, badges).
@@ -81,7 +84,7 @@ Stable hooks first (`[role="dialog"]`, `button[aria-haspopup="menu"]`, `[data-co
 
 Mapped: backgrounds and tonal containers (`bg-base`, `bg-layer-1..3`, overlays), brand/primary buttons, ghost/tonal/FAB/elevated/contrast buttons, the five-step text ladder (`label-*`), links, business/error states, toasts, component surfaces (user bubble, inputs, selector, sidebar), and the four `--dsw-shadow-lv*` tokens (M3 ambient + key pairs).
 
-Deliberately untouched: neutral alpha borders/masks/skeletons, MD3 state layers (`interactive-bg-*`), success/warn colors (MD3 defines no such roles), markdown/code colors, and inverted tokens — they already read correctly against both palettes.
+Deliberately untouched: neutral alpha borders/masks/skeletons, the harness `interactive-bg-hover` state layer (already the spec 8% on-surface), success/warn colors (MD3 defines no such roles), markdown/code colors, and inverted tokens — they already read correctly against both palettes. The theme's own rules replace `interactive-bg-active` (14%) with the spec 10% pressed layer where it styles buttons and menu items.
 
 Known limits: the harness type scale is its own (MD3 type styles do not map 1:1 onto `--dsw-font-*`), markdown text styles stay on the harness scale, and third-party plugin components are not targeted (registry check only covers harness bundles).
 

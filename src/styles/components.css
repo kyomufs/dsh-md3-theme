@@ -36,12 +36,12 @@ html [role="listbox"] [role="option"]:hover {
 }
 html [role="menu"] [role="menuitem"]:active,
 html [role="listbox"] [role="option"]:active {
-  background: var(--dsw-alias-interactive-bg-active);
+  background: color-mix(in srgb, var(--dsw-alias-label-primary) 10%, transparent);
 }
 
 /* ===================== State layers: ghost & icon buttons ================ *
- * M3 interactive default: hover = on-surface 8%, html pressed = 12%. The dsh
- * interactive-bg tokens are theme-aware equivalents of those state layers. */
+ * M3 interactive (spec): hover = on-surface 8%, pressed = 10%; transitions run
+ * on the effects spring (colour) and the fast spatial spring (radius morph). */
 html .hHd-Xa_iconButton,
 html .hHd-Xa_newSession,
 html .hHd-Xa_panelRow,
@@ -59,6 +59,7 @@ html .zGbnIq_modelEmpty,
 html .rtSEdW_creatorButton {
   transition:
     background-color var(--dsh-md3-dur-effects) var(--dsh-md3-spring-effects),
+    border-radius var(--dsh-md3-dur-spatial-fast) var(--dsh-md3-spring-spatial-fast),
     transform var(--dsh-md3-dur-spatial-fast) var(--dsh-md3-spring-spatial-fast);
 }
 html .hHd-Xa_iconButton:hover:not(:disabled),
@@ -90,7 +91,7 @@ html ._8HJdBW_themeCube:active:not(:disabled),
 html .zGbnIq_addButton:active:not(:disabled),
 html .zGbnIq_modelEmpty:active:not(:disabled),
 html .rtSEdW_creatorButton:active:not(:disabled) {
-  background: var(--dsw-alias-interactive-bg-active);
+  background: color-mix(in srgb, var(--dsw-alias-label-primary) 10%, transparent);
 }
 
 /* ===================== Filled buttons: M3 state layers ==================== */
@@ -99,6 +100,7 @@ html .uV2eYG_add,
 html .dsh_notification_buttonPri {
   transition:
     transform var(--dsh-md3-dur-spatial-fast) var(--dsh-md3-spring-spatial-fast),
+    border-radius var(--dsh-md3-dur-spatial-fast) var(--dsh-md3-spring-spatial-fast),
     filter var(--dsh-md3-dur-effects) var(--dsh-md3-spring-effects);
 }
 html .uV2eYG_primary:hover:not(:disabled),
@@ -111,6 +113,46 @@ html .uV2eYG_add:active:not(:disabled),
 html .dsh_notification_buttonPri:active:not(:disabled) {
   transform: scale(0.97);
   filter: brightness(0.95);
+}
+
+/* ===================== Shape morph: pressed buttons (Expressive) ========== *
+ * Spec (PressedContainerShape): a round button morphs CornerFull → CornerSmall
+ * (8dp) while pressed; the fast spatial spring carries the corner change — the
+ * signature M3 Expressive shape-morph, applied to every pill button of the
+ * harness. Cards/dialogs keep their resting radius (no spec morph there). */
+html .hHd-Xa_iconButton:active:not(:disabled),
+html .hHd-Xa_newSession:active:not(:disabled),
+html .hHd-Xa_panelRow:active:not(:disabled),
+html .bhn1Oq_iconButton:active:not(:disabled),
+html .bhn1Oq_searchButton:active:not(:disabled),
+html .P3OORG_iconButton:active:not(:disabled),
+html .VOzbGW_close:active:not(:disabled),
+html .EvIC1a_older button:active:not(:disabled),
+html [data-dockkit-add-tab]:active:not(:disabled),
+html .t1T8VW_copy:active:not(:disabled),
+html .dsh_notification_buttonGhost:active:not(:disabled),
+html .dsh_notification_button:active:not(:disabled),
+html ._8HJdBW_themeCube:active:not(:disabled),
+html .zGbnIq_addButton:active:not(:disabled),
+html .zGbnIq_modelEmpty:active:not(:disabled),
+html .rtSEdW_creatorButton:active:not(:disabled),
+html .uV2eYG_primary:active:not(:disabled),
+html .uV2eYG_add:active:not(:disabled),
+html .dsh_notification_buttonPri:active:not(:disabled),
+html .Sh0Q9G_trigger:active:not(:disabled),
+html ._7KE1Ra_trigger:active:not(:disabled),
+html .oY77xG_selector:active:not(:disabled),
+html .hVGvvW_selector:active:not(:disabled),
+html .lats3W_selector:active:not(:disabled),
+html .T1PP_q_selector:active:not(:disabled),
+html .pXSMma_workspace:active:not(:disabled),
+html .cubgiG_seat:active:not(:disabled),
+html button[aria-haspopup="menu"]:active:not(:disabled),
+html button[aria-haspopup="listbox"]:active:not(:disabled),
+html button[aria-haspopup="dialog"]:active:not(:disabled),
+html button[aria-haspopup="true"]:active:not(:disabled),
+html [data-composer-card] button:active:not(:disabled) {
+  border-radius: var(--dsh-md3-radius-s);
 }
 
 /* ===================== Settings dialog internals ===================== *
@@ -142,7 +184,9 @@ html .T1PP_q_selector,
 html .pXSMma_workspace,
 html .cubgiG_seat {
   border-radius: var(--dsh-md3-radius-full);
-  transition: background-color var(--dsh-md3-dur-effects) var(--dsh-md3-spring-effects);
+  transition:
+    background-color var(--dsh-md3-dur-effects) var(--dsh-md3-spring-effects),
+    border-radius var(--dsh-md3-dur-spatial-fast) var(--dsh-md3-spring-spatial-fast);
 }
 html .oY77xG_selector:hover:not(:disabled),
 html .hVGvvW_selector:hover:not(:disabled),
@@ -157,6 +201,49 @@ html .cubgiG_seat:hover:not(:disabled) {
 html .hHd-Xa_newSession,
 html .hHd-Xa_panelRow {
   border-radius: var(--dsh-md3-radius-full);
+}
+
+/* ===================== Connected button group (dock chrome) ============== *
+ * Spec (ConnectedButtonGroup): 2dp gap at every size, fully round outer
+ * container, outline-variant stroke, inner buttons at the small (8dp) corner.
+ * The dock strip's icon-button pair is the only adjacent pure button cluster
+ * in the harness — the composer toolbar shares its row with the input, so it
+ * stays a standard group (spec: 12dp between buttons — already the case). */
+html ._stripChrome_17p4l_212 {
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid var(--dsw-alias-border-l2);
+  border-radius: var(--dsh-md3-radius-full);
+}
+html ._stripChrome_17p4l_212 > button {
+  border-radius: var(--dsh-md3-radius-s);
+}
+
+/* ===================== Split button (model + effort trigger) ============= *
+ * Spec (SplitButton): leading region carries the primary content, trailing
+ * region is the menu affordance;2dp between regions, small inner corners
+ * (4dp), fully round outer container. The harness trigger already renders
+ * both regions (label span + effort span + chevron) inside one button — this
+ * rule only gives them the split-button anatomy; clicks keep their original
+ * menu behaviour. */
+html ._7KE1Ra_trigger {
+  border: 1px solid var(--dsw-alias-border-l2);
+  background: var(--dsw-alias-bg-module-platform);
+  gap: 2px;
+  padding-right: 3px;
+}
+html ._7KE1Ra_triggerEffort {
+  background: var(--dsw-alias-state-business-tertiary);
+  color: var(--dsw-alias-state-business-primary);
+  border-radius: var(--dsh-md3-radius-xs);
+  padding: 2px 6px;
+}
+html ._7KE1Ra_triggerEffort + svg {
+  background: var(--dsw-alias-state-business-tertiary);
+  color: var(--dsw-alias-state-business-primary);
+  border-radius: 0 var(--dsh-md3-radius-xs) var(--dsh-md3-radius-xs) 0;
+  padding: 3px 5px 3px 1px;
+  box-sizing: content-box;
 }
 
 /* ===================== Session list (navigation drawer) =================== */
@@ -190,7 +277,9 @@ html [data-composer-card]:focus-within {
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--dsw-alias-brand-primary) 55%, transparent);
 }
 html [data-composer-card] button:not(.uV2eYG_primary):not(.uV2eYG_add):not(:disabled) {
-  transition: background-color var(--dsh-md3-dur-effects) var(--dsh-md3-spring-effects);
+  transition:
+    background-color var(--dsh-md3-dur-effects) var(--dsh-md3-spring-effects),
+    border-radius var(--dsh-md3-dur-spatial-fast) var(--dsh-md3-spring-spatial-fast);
 }
 html [data-composer-card] button:not(.uV2eYG_primary):not(.uV2eYG_add):hover:not(:disabled) {
   background: var(--dsw-alias-interactive-bg-hover);
@@ -415,20 +504,27 @@ html input[type="range"]::-moz-range-thumb {
 }
 
 /* ===================== Progress & loading indicators ==================== *
- * M3: primary rails on outline-variant tracks, fully rounded ends. */
-html .gSkjMW_progressTrack,
-html .dWHa_historyLoadingBar {
+ * Spec (LinearProgressIndicator):4dp track, fully rounded ends, active
+ * indicator = primary, track = secondary container. The harness file-card
+ * bar keeps its own indeterminate wave/determinate-width animation — this
+ * rule only re-colors and rounds it per spec. Circular loading indicator:
+ * 24dp container,4dp thickness, primary arc over the secondary-container
+ * track. Text status labels (pager "3/12", todo progress text) are type, not
+ * indicators — no fill is applied to them. */
+html .gSkjMW_progressTrack {
+  height: 4px;
   border-radius: var(--dsh-md3-radius-full);
+  background: var(--dsw-alias-state-business-tertiary);
 }
-html .gSkjMW_progress,
-html .gSkjMW_progressBar,
-html .Mbwy4a_progress,
-html .lXshSW_progress,
-html .lXshSW_glyphProgress {
+html .gSkjMW_progressBar {
   border-radius: var(--dsh-md3-radius-full);
   background-color: var(--dsw-alias-state-business-primary);
 }
 html .gSkjMW_spinner {
+  width: 24px;
+  height: 24px;
+  border-width: 4px;
+  border-color: var(--dsw-alias-state-business-tertiary);
   border-top-color: var(--dsw-alias-state-business-primary);
 }
 
